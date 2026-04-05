@@ -115,10 +115,10 @@ export class RuleClassifier {
     }
 
     // Check if output is purely tool calls
-    const hasOnlyToolUse = response.content.every(b => b.type === 'tool_use');
+    const hasOnlyToolUse = response.content.every((b) => b.type === 'tool_use');
     if (hasOnlyToolUse && response.content.length > 0) {
       const usesStigmergy = response.content.some(
-        b => b.type === 'tool_use' && b.name && STIGMERGY_TOOL_NAMES.has(b.name),
+        (b) => b.type === 'tool_use' && b.name && STIGMERGY_TOOL_NAMES.has(b.name),
       );
       if (runType === RunType.STIGMERGY && usesStigmergy) {
         return TokenCategory.MECHANISM_OVERHEAD;
@@ -131,35 +131,39 @@ export class RuleClassifier {
   private extractText(message: Message): string {
     if (typeof message.content === 'string') return message.content;
     return message.content
-      .map(b => b.text ?? b.content ?? (b.input ? JSON.stringify(b.input) : ''))
+      .map((b) => b.text ?? b.content ?? (b.input ? JSON.stringify(b.input) : ''))
       .join(' ');
   }
 
   private matchesAnyPattern(text: string, patterns: RegExp[]): boolean {
-    return patterns.some(p => p.test(text));
+    return patterns.some((p) => p.test(text));
   }
 
   private isStigmergyToolResult(message: Message): boolean {
     if (typeof message.content === 'string') return false;
-    return message.content.some(
-      b => b.type === 'tool_result' && b.tool_use_id !== undefined,
-    );
+    return message.content.some((b) => b.type === 'tool_result' && b.tool_use_id !== undefined);
   }
 
+  /**
+   * Minimum character length to classify a tool result as content transfer
+   * rather than protocol overhead. Empirically tuned: MCP tool responses
+   * under this threshold are typically acknowledgements or status messages.
+   */
+  static readonly CONTENT_BEARING_THRESHOLD = 500;
+
   private isContentBearing(text: string): boolean {
-    // Heuristic: if the text is long (>500 chars) it's likely content, not protocol
-    return text.length > 500;
+    return text.length > RuleClassifier.CONTENT_BEARING_THRESHOLD;
   }
 
   private isToolUseOnly(message: Message): boolean {
     if (typeof message.content === 'string') return false;
-    return message.content.every(b => b.type === 'tool_use');
+    return message.content.every((b) => b.type === 'tool_use');
   }
 
   private usesStigmergyTools(message: Message): boolean {
     if (typeof message.content === 'string') return false;
     return message.content.some(
-      b => b.type === 'tool_use' && b.name !== undefined && STIGMERGY_TOOL_NAMES.has(b.name),
+      (b) => b.type === 'tool_use' && b.name !== undefined && STIGMERGY_TOOL_NAMES.has(b.name),
     );
   }
 }

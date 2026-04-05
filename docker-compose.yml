@@ -1,0 +1,13 @@
+services:
+  benchmark:
+    build: .
+    volumes:
+      - benchmark-data:/data
+    environment:
+      - STIGMERGY_BENCHMARK_DB=/data/stigmergy-benchmark.db
+      # Uncomment and set for real LLM providers:
+      # - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+volumes:
+  benchmark-data:

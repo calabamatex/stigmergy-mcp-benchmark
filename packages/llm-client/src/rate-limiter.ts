@@ -40,7 +40,7 @@ export class RateLimitedLLMClient implements LLMClient {
   }
 
   async complete(request: CompletionRequest): Promise<CompletionResponse> {
-    // Check budget before calling
+    // Pre-call budget check: reject if already at or over budget
     if (this.config.maxTotalTokens > 0 && this.totalTokensUsed >= this.config.maxTotalTokens) {
       throw new BudgetExhaustedError(this.totalTokensUsed, this.config.maxTotalTokens);
     }
@@ -50,7 +50,7 @@ export class RateLimitedLLMClient implements LLMClient {
       const elapsed = Date.now() - this.lastCallTime;
       const remaining = this.config.minDelayBetweenCallsMs - elapsed;
       if (remaining > 0) {
-        await new Promise(resolve => setTimeout(resolve, remaining));
+        await new Promise((resolve) => setTimeout(resolve, remaining));
       }
     }
 
@@ -60,6 +60,13 @@ export class RateLimitedLLMClient implements LLMClient {
     // Track token usage
     const tokens = response.usage.input_tokens + response.usage.output_tokens;
     this.totalTokensUsed += tokens;
+
+    // Post-call budget check: if this call pushed us over budget, throw immediately
+    // so the caller knows the budget was exceeded (the response is still returned
+    // via the error for observability, but no further calls will be allowed)
+    if (this.config.maxTotalTokens > 0 && this.totalTokensUsed > this.config.maxTotalTokens) {
+      throw new BudgetExhaustedError(this.totalTokensUsed, this.config.maxTotalTokens);
+    }
 
     return response;
   }

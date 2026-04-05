@@ -16,6 +16,8 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^9.0.0",
     "@types/node": "^20.0.0",
     "@vitest/coverage-v8": "^2.1.0",
