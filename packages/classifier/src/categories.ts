@@ -33,7 +33,7 @@ export const CONTENT_TRANSFER_PATTERNS: RegExp[] = [
   /\bthe\s+following\s+(was|is)\s+(produced|generated|found)\s+by\b/i,
   /\bagent\s+\w+('s)?\s+(output|result|analysis|response)\s*:/i,
   /\b(previous|prior)\s+agent('s)?\s+(output|work|response)\b/i,
-  /^```[\s\S]{200,}/m, // Large code blocks (likely work product)
+  /^```[\s\S]{200,}/m, // Large code blocks (>= 200 chars, likely work product)
 ];
 
 /**

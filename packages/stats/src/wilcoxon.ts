@@ -1,31 +1,6 @@
 import type { HypothesisTestResult } from '@stigmergy-benchmark/core';
 
 /**
- * Exact critical values for Wilcoxon signed-rank test (two-sided, alpha=0.05).
- * Index = n (sample size after removing zeros), value = critical W.
- * If W <= critical value, reject H0.
- * For n < 5, the test cannot reach significance at alpha=0.05.
- */
-const EXACT_CRITICAL_005: Record<number, number> = {
-  5: 0,
-  6: 2,
-  7: 3,
-  8: 5,
-  9: 8,
-  10: 10,
-  11: 13,
-  12: 17,
-  13: 21,
-  14: 25,
-  15: 30,
-  16: 35,
-  17: 41,
-  18: 47,
-  19: 53,
-  20: 60,
-};
-
-/**
  * Compute exact p-value for small n using enumeration of all possible
  * rank assignments. For n <= 20 this is feasible (2^n combinations).
  */

@@ -67,11 +67,12 @@ export class RetryLLMClient implements LLMClient {
 
   private computeDelay(attempt: number): number {
     const expDelay = this.config.baseDelayMs * Math.pow(2, attempt);
-    const jitter = Math.random() * this.config.baseDelayMs * 0.25;
+    const JITTER_FACTOR = 0.25;
+    const jitter = Math.random() * this.config.baseDelayMs * JITTER_FACTOR;
     return Math.min(expDelay + jitter, this.config.maxDelayMs);
   }
 }
 
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

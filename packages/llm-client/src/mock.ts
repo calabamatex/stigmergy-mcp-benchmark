@@ -1,4 +1,8 @@
-import type { CompletionRequest, CompletionResponse, ContentBlock } from '@stigmergy-benchmark/core';
+import type {
+  CompletionRequest,
+  CompletionResponse,
+  ContentBlock,
+} from '@stigmergy-benchmark/core';
 import type { LLMClient } from './client.js';
 
 export interface MockLLMConfig {
@@ -19,6 +23,18 @@ export interface MockResponse {
   stopReason?: string;
 }
 
+/** Probability of generating a tool_use response when tools are available. */
+const TOOL_CALL_PROBABILITY = 0.4;
+
+/** Fraction of input tokens simulated as cache hits on non-first trials. */
+const CACHE_HIT_FACTOR = 0.3;
+
+/** Upper bound for seeded PRNG initialization. */
+const PRNG_MAX_SEED = 2147483647;
+
+/** PRNG normalization constant (2^32). */
+const PRNG_NORM = 4294967296;
+
 const DEFAULT_CONFIG: MockLLMConfig = {
   baseInputTokens: 500,
   baseOutputTokens: 200,
@@ -37,7 +53,7 @@ export class MockLLMClient implements LLMClient {
 
   constructor(config?: Partial<MockLLMConfig>) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-    this.rngState = this.config.seed ?? Math.floor(Math.random() * 2147483647);
+    this.rngState = this.config.seed ?? Math.floor(Math.random() * PRNG_MAX_SEED);
   }
 
   /** Simple seeded PRNG (mulberry32). Returns [0, 1). */
@@ -45,7 +61,7 @@ export class MockLLMClient implements LLMClient {
     let t = (this.rngState += 0x6d2b79f5);
     t = Math.imul(t ^ (t >>> 15), t | 1);
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    return ((t ^ (t >>> 14)) >>> 0) / PRNG_NORM;
   }
 
   /** Apply variance: base * (1 + uniform(-v, +v)). */
@@ -67,7 +83,7 @@ export class MockLLMClient implements LLMClient {
     } else {
       // Check if the request includes tools and randomly decide to use one
       const hasTools = request.tools && request.tools.length > 0;
-      const useToolCall = hasTools && this.nextRandom() > 0.6;
+      const useToolCall = hasTools && this.nextRandom() < TOOL_CALL_PROBABILITY;
 
       if (useToolCall && request.tools) {
         const tool = request.tools[Math.floor(this.nextRandom() * request.tools.length)];
@@ -84,7 +100,8 @@ export class MockLLMClient implements LLMClient {
         content = [
           {
             type: 'text',
-            text: `Mock response #${idx} for agent ${request.context.agentId}. ` +
+            text:
+              `Mock response #${idx} for agent ${request.context.agentId}. ` +
               `Processing ${request.messages.length} messages.`,
           },
         ];
@@ -93,9 +110,10 @@ export class MockLLMClient implements LLMClient {
 
     const inputTokens = this.applyVariance(this.config.baseInputTokens);
     const outputTokens = this.applyVariance(this.config.baseOutputTokens);
-    const cachedTokens = request.context.trialIndex > 0
-      ? Math.round(inputTokens * 0.3 * this.nextRandom())
-      : 0;
+    const cachedTokens =
+      request.context.trialIndex > 0
+        ? Math.round(inputTokens * CACHE_HIT_FACTOR * this.nextRandom())
+        : 0;
 
     return {
       content,
@@ -116,6 +134,6 @@ export class MockLLMClient implements LLMClient {
   /** Reset call counter and PRNG state. */
   reset(): void {
     this.callIndex = 0;
-    this.rngState = this.config.seed ?? Math.floor(Math.random() * 2147483647);
+    this.rngState = this.config.seed ?? Math.floor(Math.random() * PRNG_MAX_SEED);
   }
 }

@@ -1,14 +1,18 @@
 import { Router } from 'express';
 import type { WebSocket } from 'ws';
-import { RunType, type ComparisonConfig } from '@stigmergy-benchmark/core';
+import type { ComparisonConfig, ComparisonResult } from '@stigmergy-benchmark/core';
 import { getTask } from '@stigmergy-benchmark/tasks';
 import { ComparisonEngine } from '@stigmergy-benchmark/engine';
-import { BenchmarkStore } from '@stigmergy-benchmark/storage';
+import type { BenchmarkStore } from '@stigmergy-benchmark/storage';
 import { MockLLMClient, AnthropicClient, OpenAIClient, RetryLLMClient, RateLimitedLLMClient } from '@stigmergy-benchmark/llm-client';
 import type { LLMClient } from '@stigmergy-benchmark/llm-client';
+import { z } from 'zod';
 
 /** Active WebSocket clients listening for live updates. */
 const listeners = new Set<WebSocket>();
+
+/** Track active comparison to prevent concurrent runs. */
+let activeComparison: { id: string; promise: Promise<ComparisonResult> } | null = null;
 
 export function addWSListener(ws: WebSocket): void {
   listeners.add(ws);
@@ -18,20 +22,43 @@ export function addWSListener(ws: WebSocket): void {
 function broadcast(data: unknown): void {
   const msg = JSON.stringify(data);
   for (const ws of listeners) {
-    if (ws.readyState === 1) { // OPEN
-      ws.send(msg);
+    try {
+      if (ws.readyState === 1) { // OPEN
+        ws.send(msg);
+      }
+    } catch {
+      // WebSocket closed between readyState check and send — remove it
+      listeners.delete(ws);
     }
   }
 }
 
+const CompareRequestSchema = z.object({
+  taskId: z.string().min(1, 'taskId is required'),
+  config: z.object({
+    trialCount: z.number().int().min(3).max(100).optional(),
+    provider: z.enum(['mock', 'anthropic', 'openai']).optional(),
+    model: z.string().optional(),
+    temperature: z.number().min(0).max(2).optional(),
+    promptCachingEnabled: z.boolean().optional(),
+    skipSingleAgent: z.boolean().optional(),
+  }).optional(),
+});
+
 export function createLiveRoutes(store: BenchmarkStore): Router {
   const router = Router();
 
-  router.post('/api/compare', async (req, res) => {
-    const { taskId, config } = req.body as { taskId: string; config: Partial<ComparisonConfig> };
+  router.post('/api/compare', (req, res) => {
+    const parsed = CompareRequestSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.issues[0].message });
+      return;
+    }
 
-    if (!taskId) {
-      res.status(400).json({ error: 'taskId is required' });
+    const { taskId, config } = parsed.data;
+
+    if (activeComparison) {
+      res.status(409).json({ error: 'A comparison is already running', activeId: activeComparison.id });
       return;
     }
 
@@ -55,12 +82,10 @@ export function createLiveRoutes(store: BenchmarkStore): Router {
     const client = createClient(fullConfig.provider);
     const engine = new ComparisonEngine(store, client);
 
-    // Respond immediately with comparison ID
     const comparisonId = crypto.randomUUID();
-    res.json({ comparisonId, status: 'started' });
 
-    // Run comparison async, streaming events via WebSocket
-    engine.runComparison(task, fullConfig, {
+    // Track the active comparison promise
+    const promise = engine.runComparison(task, fullConfig, {
       onTrialStart(trialIndex, totalTrials) {
         broadcast({ type: 'trial_start', trialIndex, totalTrials });
       },
@@ -76,10 +101,29 @@ export function createLiveRoutes(store: BenchmarkStore): Router {
       onError(trialIndex, error) {
         broadcast({ type: 'error', trialIndex, message: error.message });
       },
-    }).then(result => {
-      broadcast({ type: 'complete', result });
-    }).catch(err => {
-      broadcast({ type: 'error', trialIndex: -1, message: String(err) });
+    });
+
+    activeComparison = { id: comparisonId, promise };
+
+    promise
+      .then(result => {
+        broadcast({ type: 'complete', result });
+      })
+      .catch(err => {
+        console.error('Comparison failed:', err);
+        broadcast({ type: 'error', trialIndex: -1, message: String(err) });
+      })
+      .finally(() => {
+        activeComparison = null;
+      });
+
+    res.json({ comparisonId, status: 'started' });
+  });
+
+  router.get('/api/compare/status', (_req, res) => {
+    res.json({
+      active: activeComparison !== null,
+      activeId: activeComparison?.id ?? null,
     });
   });
 
@@ -95,6 +139,7 @@ function createClient(provider: string): LLMClient {
     case 'openai':
       return new RateLimitedLLMClient(new RetryLLMClient(new OpenAIClient()));
     default:
+      console.warn(`Unknown provider "${provider}", falling back to mock`);
       return new MockLLMClient({ seed: 42, variance: 0.2 });
   }
 }

@@ -8,13 +8,33 @@ import {
   type AggregatedStats,
   type RunContext,
 } from '@stigmergy-benchmark/core';
-import { SingleAgentExecutor, MessagePassingExecutor, StigmergySwarmExecutor } from '@stigmergy-benchmark/executors';
+import {
+  SingleAgentExecutor,
+  MessagePassingExecutor,
+  StigmergySwarmExecutor,
+} from '@stigmergy-benchmark/executors';
 import type { RunConfig } from '@stigmergy-benchmark/executors';
 import type { LLMClient } from '@stigmergy-benchmark/llm-client';
-import { aggregateStats, computePerTrialMetrics, calibrateCrossValidation } from '@stigmergy-benchmark/stats';
-import { BenchmarkStore } from '@stigmergy-benchmark/storage';
+import {
+  aggregateStats,
+  computePerTrialMetrics,
+  calibrateCrossValidation,
+} from '@stigmergy-benchmark/stats';
+import type { BenchmarkStore } from '@stigmergy-benchmark/storage';
 import { crossValidateTrial } from './cross-validation.js';
 import { BenchmarkLogger } from './logger.js';
+
+/** Default maximum conversation turns per agent in a single run. */
+const DEFAULT_MAX_TURNS = 5;
+
+/** Default maximum tokens per API call. */
+const DEFAULT_MAX_TOKENS = 4096;
+
+/** Minimum number of trials required for a valid comparison. */
+const MIN_TRIAL_COUNT = 3;
+
+/** Abort the comparison if more than this fraction of trials fail. */
+const FAILURE_ABORT_RATIO = 0.5;
 
 export interface ComparisonCallbacks {
   onTrialStart?: (trialIndex: number, totalTrials: number) => void;
@@ -57,20 +77,29 @@ export class ComparisonEngine {
 
     const runConfig: RunConfig = {
       model: config.model,
-      maxTurns: 5,
-      maxTokens: 4096,
+      maxTurns: DEFAULT_MAX_TURNS,
+      maxTokens: DEFAULT_MAX_TOKENS,
       temperature: config.temperature,
       agentCount: task.agentCount,
     };
 
-    this.logger.info('comparison_start', { comparisonId, taskId: task.id, trialCount: config.trialCount });
+    this.logger.info('comparison_start', {
+      comparisonId,
+      taskId: task.id,
+      trialCount: config.trialCount,
+    });
 
     for (let i = 0; i < config.trialCount; i++) {
       callbacks?.onTrialStart?.(i, config.trialCount);
 
       try {
         const trial = await this.runSingleTrial(
-          task, runConfig, comparisonId, i, config, callbacks,
+          task,
+          runConfig,
+          comparisonId,
+          i,
+          config,
+          callbacks,
         );
 
         trials.push(trial);
@@ -90,7 +119,7 @@ export class ComparisonEngine {
         callbacks?.onError?.(i, error);
 
         // If > 50% of trials fail, abort
-        if (errors.length > config.trialCount / 2) {
+        if (errors.length > config.trialCount * FAILURE_ABORT_RATIO) {
           console.error(
             `Aborting: ${errors.length}/${i + 1} trials failed (>${Math.floor(config.trialCount / 2)} threshold)`,
           );
@@ -118,7 +147,11 @@ export class ComparisonEngine {
     };
 
     this.store.saveComparisonResult(result);
-    this.logger.info('comparison_complete', { comparisonId, trialCount: trials.length, errors: errors.length });
+    this.logger.info('comparison_complete', {
+      comparisonId,
+      trialCount: trials.length,
+      errors: errors.length,
+    });
     return result;
   }
 
@@ -126,8 +159,8 @@ export class ComparisonEngine {
     if (!task.steps || task.steps.length === 0) {
       throw new Error(`Task "${task.id}" has no steps defined`);
     }
-    if (config.trialCount < 3) {
-      throw new Error(`Trial count must be >= 3 (got ${config.trialCount})`);
+    if (config.trialCount < MIN_TRIAL_COUNT) {
+      throw new Error(`Trial count must be >= ${MIN_TRIAL_COUNT} (got ${config.trialCount})`);
     }
     if (!config.model) {
       throw new Error('Model name is required');
@@ -153,20 +186,31 @@ export class ComparisonEngine {
     callbacks?.onRunStart?.(trialIndex, RunType.SINGLE_AGENT);
     const runA = config.skipSingleAgent
       ? this.emptyRunResult(RunType.SINGLE_AGENT, makeContext(RunType.SINGLE_AGENT).runId)
-      : await this.singleAgent.execute(task, runConfig, makeContext(RunType.SINGLE_AGENT), this.client);
+      : await this.singleAgent.execute(
+          task,
+          runConfig,
+          makeContext(RunType.SINGLE_AGENT),
+          this.client,
+        );
     callbacks?.onRunComplete?.(trialIndex, RunType.SINGLE_AGENT);
 
     // Run B: Message-Passing
     callbacks?.onRunStart?.(trialIndex, RunType.MESSAGE_PASSING);
     const runB = await this.messagePassing.execute(
-      task, runConfig, makeContext(RunType.MESSAGE_PASSING), this.client,
+      task,
+      runConfig,
+      makeContext(RunType.MESSAGE_PASSING),
+      this.client,
     );
     callbacks?.onRunComplete?.(trialIndex, RunType.MESSAGE_PASSING);
 
     // Run C: Stigmergy
     callbacks?.onRunStart?.(trialIndex, RunType.STIGMERGY);
     const runC = await this.stigmergy.execute(
-      task, runConfig, makeContext(RunType.STIGMERGY), this.client,
+      task,
+      runConfig,
+      makeContext(RunType.STIGMERGY),
+      this.client,
     );
     callbacks?.onRunComplete?.(trialIndex, RunType.STIGMERGY);
 
@@ -184,14 +228,25 @@ export class ComparisonEngine {
 
   private emptyRunResult(runType: RunType, runId: string) {
     return {
-      runType, runId,
-      contentTransferTokens: 0, mechanismOverheadTokens: 0,
-      coordinationInstructionsTokens: 0, taskReasoningTokens: 0,
-      systemIdentityTokens: 0, interAgentTokens: 0,
-      agentAutonomousTokens: 0, totalTokens: 0,
-      cachedTokens: 0, effectiveTokens: 0, cacheHitRate: 0,
-      wallClockMs: 0, agentCount: 0, apiCallCount: 0,
-      success: true, output: null, tokenLog: [],
+      runType,
+      runId,
+      contentTransferTokens: 0,
+      mechanismOverheadTokens: 0,
+      coordinationInstructionsTokens: 0,
+      taskReasoningTokens: 0,
+      systemIdentityTokens: 0,
+      interAgentTokens: 0,
+      agentAutonomousTokens: 0,
+      totalTokens: 0,
+      cachedTokens: 0,
+      effectiveTokens: 0,
+      cacheHitRate: 0,
+      wallClockMs: 0,
+      agentCount: 0,
+      apiCallCount: 0,
+      success: true,
+      output: null,
+      tokenLog: [],
     };
   }
 }

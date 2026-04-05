@@ -11,6 +11,9 @@ export interface CategoryTokens {
   outputTokens: number;
 }
 
+/** Maximum records before the tracker starts dropping the oldest entries. */
+const MAX_RECORDS = 100_000;
+
 /**
  * Accumulates token usage records per API call.
  * Each record is tagged with the run context (runId, trialIndex, agentId, runType).
@@ -41,6 +44,11 @@ export class TokenTracker {
         runType: context.runType as RunType,
         cacheHit: metadata.cachedInputTokens > 0,
       });
+    }
+
+    // Prevent unbounded memory growth in long-running sessions
+    if (this.records.length > MAX_RECORDS) {
+      this.records = this.records.slice(-MAX_RECORDS);
     }
   }
 

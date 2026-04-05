@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { listTasks, getTask } from '@stigmergy-benchmark/tasks';
-import { BenchmarkStore } from '@stigmergy-benchmark/storage';
+import type { BenchmarkStore } from '@stigmergy-benchmark/storage';
 
 export function createRoutes(store: BenchmarkStore): Router {
   const router = Router();

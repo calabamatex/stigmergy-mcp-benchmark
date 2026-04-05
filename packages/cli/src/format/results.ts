@@ -1,9 +1,8 @@
-import {
-  type ComparisonResult,
-  type DescriptiveStats,
-  type AggregatedStats,
-  type CrossValidationCalibration,
-  ReportingLevel,
+import type {
+  ComparisonResult,
+  DescriptiveStats,
+  AggregatedStats,
+  CrossValidationCalibration,
 } from '@stigmergy-benchmark/core';
 
 export function formatComparisonResult(result: ComparisonResult): string {

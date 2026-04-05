@@ -15,7 +15,12 @@ function makeRequest(): CompletionRequest {
 
 describe('RateLimitedLLMClient', () => {
   it('passes through calls when under budget', async () => {
-    const mock = new MockLLMClient({ seed: 42, baseInputTokens: 100, baseOutputTokens: 50, variance: 0 });
+    const mock = new MockLLMClient({
+      seed: 42,
+      baseInputTokens: 100,
+      baseOutputTokens: 50,
+      variance: 0,
+    });
     const limited = new RateLimitedLLMClient(mock, { maxTotalTokens: 10000 });
 
     const resp = await limited.complete(makeRequest());
@@ -27,24 +32,52 @@ describe('RateLimitedLLMClient', () => {
     expect(usage.percent).toBeCloseTo(1.5, 1);
   });
 
-  it('throws BudgetExhaustedError when over budget', async () => {
-    const mock = new MockLLMClient({ seed: 42, baseInputTokens: 100, baseOutputTokens: 50, variance: 0 });
+  it('throws BudgetExhaustedError when a call exceeds budget', async () => {
+    const mock = new MockLLMClient({
+      seed: 42,
+      baseInputTokens: 100,
+      baseOutputTokens: 50,
+      variance: 0,
+    });
     const limited = new RateLimitedLLMClient(mock, { maxTotalTokens: 200 });
 
-    // First call: 150 tokens, under budget
+    // First call: 150 tokens, under budget (200) — succeeds
     await limited.complete(makeRequest());
+    expect(limited.getUsage().tokens).toBe(150);
 
-    // Second call: would push to 300, but budget check happens before call
-    // After first call we have 150 tokens, budget is 200, so we proceed
-    await limited.complete(makeRequest());
-
-    // Now at 300 tokens, over 200 budget
+    // Second call: would push to 300, exceeding 200 budget — throws immediately after the call
+    await expect(limited.complete(makeRequest())).rejects.toThrow(BudgetExhaustedError);
     expect(limited.isOverBudget()).toBe(true);
+
+    // Further calls are blocked by pre-call check
+    await expect(limited.complete(makeRequest())).rejects.toThrow(BudgetExhaustedError);
+  });
+
+  it('allows calls that stay exactly within budget', async () => {
+    const mock = new MockLLMClient({
+      seed: 42,
+      baseInputTokens: 100,
+      baseOutputTokens: 50,
+      variance: 0,
+    });
+    const limited = new RateLimitedLLMClient(mock, { maxTotalTokens: 300 });
+
+    // Two calls × 150 = 300, exactly at budget — both succeed
+    await limited.complete(makeRequest());
+    await limited.complete(makeRequest());
+    expect(limited.getUsage().tokens).toBe(300);
+
+    // Third call blocked by pre-call check (300 >= 300)
     await expect(limited.complete(makeRequest())).rejects.toThrow(BudgetExhaustedError);
   });
 
   it('unlimited budget (0) never throws', async () => {
-    const mock = new MockLLMClient({ seed: 42, baseInputTokens: 100, baseOutputTokens: 50, variance: 0 });
+    const mock = new MockLLMClient({
+      seed: 42,
+      baseInputTokens: 100,
+      baseOutputTokens: 50,
+      variance: 0,
+    });
     const limited = new RateLimitedLLMClient(mock, { maxTotalTokens: 0 });
 
     for (let i = 0; i < 10; i++) {
@@ -56,7 +89,12 @@ describe('RateLimitedLLMClient', () => {
   });
 
   it('tracks cumulative usage correctly', async () => {
-    const mock = new MockLLMClient({ seed: 42, baseInputTokens: 100, baseOutputTokens: 50, variance: 0 });
+    const mock = new MockLLMClient({
+      seed: 42,
+      baseInputTokens: 100,
+      baseOutputTokens: 50,
+      variance: 0,
+    });
     const limited = new RateLimitedLLMClient(mock, { maxTotalTokens: 10000 });
 
     await limited.complete(makeRequest());

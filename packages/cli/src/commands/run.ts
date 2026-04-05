@@ -1,32 +1,52 @@
-import type { ComparisonConfig } from '@stigmergy-benchmark/core';
-import { ReportingLevel, RunType } from '@stigmergy-benchmark/core';
+import { ReportingLevel, type ComparisonConfig } from '@stigmergy-benchmark/core';
+import type { RunType } from '@stigmergy-benchmark/core';
 import { getTask } from '@stigmergy-benchmark/tasks';
 import { ComparisonEngine } from '@stigmergy-benchmark/engine';
 import { BenchmarkStore } from '@stigmergy-benchmark/storage';
-import { MockLLMClient, AnthropicClient, OpenAIClient, RetryLLMClient, RateLimitedLLMClient } from '@stigmergy-benchmark/llm-client';
+import {
+  MockLLMClient,
+  AnthropicClient,
+  OpenAIClient,
+  RetryLLMClient,
+  RateLimitedLLMClient,
+} from '@stigmergy-benchmark/llm-client';
 import type { LLMClient } from '@stigmergy-benchmark/llm-client';
-import type { ParsedArgs } from '../index.js';
-import { formatProgressLine, formatProvisionalStats } from '../format/progress.js';
+import { formatProgressLine, formatProvisionalStats, ProgressTracker } from '../format/progress.js';
 import { formatComparisonResult } from '../format/results.js';
 
-export async function runCompare(args: ParsedArgs): Promise<void> {
-  const taskId = args.flags.task as string;
-  if (!taskId) {
-    console.error('Error: --task <id> is required.\nUse "tasks list" to see available tasks.');
-    process.exit(1);
-  }
+/** Minimum trials for statistical validity. */
+const MIN_TRIALS = 3;
 
-  const task = getTask(taskId);
-  const trialCount = Math.max(3, Number(args.flags.trials) || 10);
-  const provider = (args.flags.provider as string) ?? 'mock';
-  const model = (args.flags.model as string) ?? getDefaultModel(provider);
-  const temperature = Number(args.flags.temperature) || 0;
-  const skipSingleAgent = args.flags['skip-single-agent'] === true;
-  const seed = args.flags.seed ? Number(args.flags.seed) : undefined;
-  const dbPath = (args.flags.db as string) ?? process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db';
+/** Default trial count when not specified. */
+const DEFAULT_TRIALS = 10;
 
-  if (task.crossoverTask && trialCount < 15) {
-    console.warn(`Warning: Task "${task.name}" is a crossover task. TOST requires n >= 15 for adequate power (you set ${trialCount}).`);
+/** Minimum trials for adequate TOST power on crossover tasks. */
+const MIN_CROSSOVER_TRIALS = 15;
+
+export interface CompareOptions {
+  task: string;
+  trials: string;
+  provider: string;
+  model?: string;
+  temperature: string;
+  skipSingleAgent: boolean;
+  seed?: string;
+  db: string;
+  verbose: boolean;
+}
+
+export async function runCompare(opts: CompareOptions): Promise<void> {
+  const task = getTask(opts.task);
+  const trialCount = Math.max(MIN_TRIALS, Number(opts.trials) || DEFAULT_TRIALS);
+  const provider = opts.provider;
+  const model = opts.model ?? getDefaultModel(provider);
+  const temperature = Number(opts.temperature) || 0;
+  const seed = opts.seed ? Number(opts.seed) : undefined;
+
+  if (task.crossoverTask && trialCount < MIN_CROSSOVER_TRIALS) {
+    console.warn(
+      `Warning: Task "${task.name}" is a crossover task. TOST requires n >= 15 for adequate power (you set ${trialCount}).`,
+    );
   }
 
   const config: ComparisonConfig = {
@@ -35,7 +55,7 @@ export async function runCompare(args: ParsedArgs): Promise<void> {
     model,
     temperature,
     promptCachingEnabled: true,
-    skipSingleAgent,
+    skipSingleAgent: opts.skipSingleAgent,
   };
 
   console.log(`\nStigmergy-MCP Token Comparison`);
@@ -43,16 +63,31 @@ export async function runCompare(args: ParsedArgs): Promise<void> {
   console.log(`${'─'.repeat(70)}\n`);
 
   const client = createClient(provider, seed);
-  const store = new BenchmarkStore(dbPath);
+  const store = new BenchmarkStore(opts.db);
   const engine = new ComparisonEngine(store, client);
+  const tracker = new ProgressTracker();
+  let currentRun: RunType | undefined;
 
   try {
     const result = await engine.runComparison(task, config, {
       onTrialStart(trialIndex, totalTrials) {
-        process.stdout.write(`\r${formatProgressLine(trialIndex, totalTrials, 'running')}  `);
+        tracker.onTrialStart();
+        currentRun = undefined;
+        process.stdout.write(
+          `\r${formatProgressLine(trialIndex, totalTrials, 'running', tracker)}  `,
+        );
+      },
+      onRunStart(trialIndex, runType) {
+        currentRun = runType;
+        process.stdout.write(
+          `\r${formatProgressLine(trialIndex, config.trialCount, 'running', tracker, currentRun)}  `,
+        );
       },
       onTrialComplete(trial, partialStats) {
-        process.stdout.write(`\r${formatProgressLine(trial.trialIndex, config.trialCount, 'complete')}  \n`);
+        tracker.onTrialComplete();
+        process.stdout.write(
+          `\r${formatProgressLine(trial.trialIndex, config.trialCount, 'complete', tracker)}  \n`,
+        );
 
         // Show provisional stats at milestones
         if (partialStats.reportingLevel !== ReportingLevel.RAW_ONLY) {
@@ -94,9 +129,13 @@ function createClient(provider: string, seed?: number): LLMClient {
 
 function getDefaultModel(provider: string): string {
   switch (provider) {
-    case 'anthropic': return 'claude-sonnet-4-20250514';
-    case 'openai': return 'gpt-4o';
-    case 'mock': return 'mock-model';
-    default: return 'unknown';
+    case 'anthropic':
+      return 'claude-sonnet-4-20250514';
+    case 'openai':
+      return 'gpt-4o';
+    case 'mock':
+      return 'mock-model';
+    default:
+      return 'unknown';
   }
 }

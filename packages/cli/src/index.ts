@@ -1,116 +1,64 @@
 #!/usr/bin/env node
 
+import { Command } from 'commander';
 import { runCompare } from './commands/run.js';
 import { listTasksCommand, listResultsCommand } from './commands/list.js';
 import { showResultCommand } from './commands/show.js';
 
-export interface ParsedArgs {
-  command: string;
-  subcommand?: string;
-  flags: Record<string, string | boolean>;
-  positional: string[];
-}
+const program = new Command();
 
-export function parseArgs(argv: string[]): ParsedArgs {
-  const args = argv.slice(2); // skip node + script
-  const flags: Record<string, string | boolean> = {};
-  const positional: string[] = [];
+program
+  .name('stigmergy-benchmark')
+  .description('Empirical token usage comparison — stigmergic vs message-passing coordination')
+  .version('0.1.0');
 
-  let i = 0;
-  while (i < args.length) {
-    const arg = args[i];
-    if (arg.startsWith('--')) {
-      const key = arg.slice(2);
-      const next = args[i + 1];
-      if (next && !next.startsWith('--')) {
-        flags[key] = next;
-        i += 2;
-      } else {
-        flags[key] = true;
-        i++;
-      }
-    } else {
-      positional.push(arg);
-      i++;
-    }
-  }
+// tasks list
+const tasks = program.command('tasks');
+tasks
+  .command('list')
+  .description('List available benchmark tasks')
+  .action(() => listTasksCommand());
 
-  return {
-    command: positional[0] ?? '',
-    subcommand: positional[1],
-    flags,
-    positional: positional.slice(2),
-  };
-}
+// compare
+program
+  .command('compare')
+  .description('Run a comparison benchmark')
+  .requiredOption('--task <id>', 'Task to benchmark')
+  .option('--trials <n>', 'Number of trials (min: 3)', '10')
+  .option('--provider <provider>', 'LLM provider: mock | anthropic | openai', 'mock')
+  .option('--model <model>', 'Model name (default: per provider)')
+  .option('--temperature <t>', 'Temperature', '0')
+  .option('--skip-single-agent', 'Skip Run A (faster, no cross-validation)')
+  .option('--seed <n>', 'Fixed PRNG seed for reproducibility')
+  .option('--db <path>', 'SQLite database path', process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db')
+  .option('--verbose', 'Per-call token breakdown')
+  .action(async (opts) => {
+    await runCompare({
+      task: opts.task,
+      trials: opts.trials,
+      provider: opts.provider,
+      model: opts.model,
+      temperature: opts.temperature,
+      skipSingleAgent: opts.skipSingleAgent ?? false,
+      seed: opts.seed,
+      db: opts.db,
+      verbose: opts.verbose ?? false,
+    });
+  });
 
-const USAGE = `
-stigmergy-benchmark — Empirical token usage comparison
+// results list / results show
+const results = program.command('results');
+results
+  .command('list')
+  .description('List past comparison results')
+  .option('--db <path>', 'SQLite database path', process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db')
+  .action((opts) => listResultsCommand(opts.db));
 
-Commands:
-  tasks list                              List available benchmark tasks
-  compare --task <id> [options]           Run a comparison
-  results list                            List past comparison results
-  results show <id>                       Show detailed results
+results
+  .command('show <id>')
+  .description('Show detailed results for a comparison')
+  .option('--db <path>', 'SQLite database path', process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db')
+  .action((id, opts) => showResultCommand(id, opts.db));
 
-Compare options:
-  --task <id>          Task to benchmark (required)
-  --trials <n>         Number of trials (default: 10, min: 3)
-  --provider <p>       LLM provider: mock | anthropic | openai (default: mock)
-  --model <m>          Model name (default: per provider)
-  --temperature <t>    Temperature (default: 0)
-  --skip-single-agent  Skip Run A (faster, no cross-validation)
-  --seed <n>           Fixed PRNG seed for reproducibility
-  --db <path>          SQLite database path (default: ./stigmergy-benchmark.db)
-  --verbose            Per-call token breakdown
-`.trim();
-
-async function main() {
-  const parsed = parseArgs(process.argv);
-
-  if (!parsed.command || parsed.flags.help) {
-    console.log(USAGE);
-    process.exit(0);
-  }
-
-  try {
-    switch (parsed.command) {
-      case 'tasks':
-        if (parsed.subcommand === 'list') {
-          listTasksCommand();
-        } else {
-          console.error(`Unknown subcommand: tasks ${parsed.subcommand ?? ''}\nUse: tasks list`);
-          process.exit(1);
-        }
-        break;
-
-      case 'compare':
-        await runCompare(parsed);
-        break;
-
-      case 'results':
-        if (parsed.subcommand === 'list') {
-          listResultsCommand(parsed);
-        } else if (parsed.subcommand === 'show') {
-          showResultCommand(parsed);
-        } else {
-          console.error(`Unknown subcommand: results ${parsed.subcommand ?? ''}\nUse: results list | results show <id>`);
-          process.exit(1);
-        }
-        break;
-
-      default:
-        console.error(`Unknown command: ${parsed.command}`);
-        console.log(USAGE);
-        process.exit(1);
-    }
-  } catch (err) {
-    console.error('Error:', err instanceof Error ? err.message : String(err));
-    process.exit(1);
-  }
-}
-
-// Only run main when executed directly (not imported by tests)
-const isDirectExecution = process.argv[1]?.includes('cli') || process.argv[1]?.endsWith('index.js');
-if (isDirectExecution && !process.env.VITEST) {
-  main();
-}
+// Parse and run
+program.parse();
