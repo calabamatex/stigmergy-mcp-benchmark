@@ -62,8 +62,8 @@ export interface TokenUsageRecord {
 // ============================================================
 
 export interface LLMProviderConfig {
-  type: 'anthropic' | 'openai' | 'mock';
-  apiKey: string;
+  type: 'anthropic' | 'openai' | 'gemini' | 'ollama' | 'mock';
+  apiKey?: string;
   model: string;
   maxTokens: number;
   temperature: number;

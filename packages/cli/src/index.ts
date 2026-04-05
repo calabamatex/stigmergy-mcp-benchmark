@@ -25,12 +25,20 @@ program
   .description('Run a comparison benchmark')
   .requiredOption('--task <id>', 'Task to benchmark')
   .option('--trials <n>', 'Number of trials (min: 3)', '10')
-  .option('--provider <provider>', 'LLM provider: mock | anthropic | openai', 'mock')
+  .option(
+    '--provider <provider>',
+    'LLM provider: mock | anthropic | openai | gemini | ollama',
+    'mock',
+  )
   .option('--model <model>', 'Model name (default: per provider)')
   .option('--temperature <t>', 'Temperature', '0')
   .option('--skip-single-agent', 'Skip Run A (faster, no cross-validation)')
   .option('--seed <n>', 'Fixed PRNG seed for reproducibility')
-  .option('--db <path>', 'SQLite database path', process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db')
+  .option(
+    '--db <path>',
+    'SQLite database path',
+    process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db',
+  )
   .option('--verbose', 'Per-call token breakdown')
   .action(async (opts) => {
     await runCompare({
@@ -51,13 +59,21 @@ const results = program.command('results');
 results
   .command('list')
   .description('List past comparison results')
-  .option('--db <path>', 'SQLite database path', process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db')
+  .option(
+    '--db <path>',
+    'SQLite database path',
+    process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db',
+  )
   .action((opts) => listResultsCommand(opts.db));
 
 results
   .command('show <id>')
   .description('Show detailed results for a comparison')
-  .option('--db <path>', 'SQLite database path', process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db')
+  .option(
+    '--db <path>',
+    'SQLite database path',
+    process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db',
+  )
   .action((id, opts) => showResultCommand(id, opts.db));
 
 // Parse and run

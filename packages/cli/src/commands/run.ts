@@ -7,6 +7,8 @@ import {
   MockLLMClient,
   AnthropicClient,
   OpenAIClient,
+  GeminiClient,
+  OllamaClient,
   RetryLLMClient,
   RateLimitedLLMClient,
 } from '@stigmergy-benchmark/llm-client';
@@ -120,8 +122,16 @@ function createClient(provider: string, seed?: number): LLMClient {
     case 'openai':
       client = new OpenAIClient();
       break;
+    case 'gemini':
+      client = new GeminiClient();
+      break;
+    case 'ollama':
+      client = new OllamaClient();
+      break;
     default:
-      throw new Error(`Unknown provider: ${provider}. Use: mock | anthropic | openai`);
+      throw new Error(
+        `Unknown provider: ${provider}. Use: mock | anthropic | openai | gemini | ollama`,
+      );
   }
   // Wrap real providers with retry + rate limiting
   return new RateLimitedLLMClient(new RetryLLMClient(client));
@@ -133,6 +143,10 @@ function getDefaultModel(provider: string): string {
       return 'claude-sonnet-4-20250514';
     case 'openai':
       return 'gpt-4o';
+    case 'gemini':
+      return 'gemini-2.0-flash';
+    case 'ollama':
+      return 'llama3.2';
     case 'mock':
       return 'mock-model';
     default:

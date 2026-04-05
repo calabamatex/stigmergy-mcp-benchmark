@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const BenchmarkConfigSchema = z.object({
   trialCount: z.number().int().min(3).max(100).default(10),
-  provider: z.enum(['anthropic', 'openai', 'mock']).default('anthropic'),
+  provider: z.enum(['anthropic', 'openai', 'gemini', 'ollama', 'mock']).default('anthropic'),
   model: z.string().default('claude-sonnet-4-20250514'),
   temperature: z.number().min(0).max(2).default(0),
   maxTokensPerCall: z.number().int().min(100).max(200000).default(4096),
