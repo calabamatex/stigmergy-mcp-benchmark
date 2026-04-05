@@ -24,6 +24,10 @@ Every API call's tokens are classified into exactly one category:
 
 **Key insight:** In message-passing, CT grows O(N^2) as each agent ingests all predecessors. In stigmergy, CT is O(N) — agents read compact trace summaries instead.
 
+## Full Guide
+
+For comprehensive documentation on running benchmarks end-to-end, using the web dashboard, and interpreting results, see **[docs/GUIDE.md](docs/GUIDE.md)**.
+
 ## Quick Start
 
 ```bash
