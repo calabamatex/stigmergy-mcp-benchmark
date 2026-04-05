@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import type { WebSocket } from 'ws';
-import { RunType, type ComparisonConfig } from '@stigmergy-benchmark/core';
+import type { ComparisonConfig } from '@stigmergy-benchmark/core';
 import { getTask } from '@stigmergy-benchmark/tasks';
 import { ComparisonEngine } from '@stigmergy-benchmark/engine';
-import { BenchmarkStore } from '@stigmergy-benchmark/storage';
+import type { BenchmarkStore } from '@stigmergy-benchmark/storage';
 import { MockLLMClient, AnthropicClient, OpenAIClient, RetryLLMClient, RateLimitedLLMClient } from '@stigmergy-benchmark/llm-client';
 import type { LLMClient } from '@stigmergy-benchmark/llm-client';
 

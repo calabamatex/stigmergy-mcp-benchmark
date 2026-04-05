@@ -1,11 +1,11 @@
 import type {
+  TokenCategory,
   CompletionRequest,
   CompletionResponse,
   Message,
-  TokenCategory,
 } from '@stigmergy-benchmark/core';
 import type { LLMClient } from './client.js';
-import { TokenTracker, type CategoryTokens } from './token-tracker.js';
+import type { TokenTracker, CategoryTokens } from './token-tracker.js';
 
 /**
  * Classifies a message into a token category.

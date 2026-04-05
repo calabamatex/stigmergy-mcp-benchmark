@@ -4,7 +4,6 @@ import {
   type Message,
   type CompletionRequest,
   type CompletionResponse,
-  type ContentBlock,
 } from '@stigmergy-benchmark/core';
 import {
   COORDINATION_PATTERNS,

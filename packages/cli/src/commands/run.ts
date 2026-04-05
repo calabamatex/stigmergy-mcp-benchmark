@@ -1,5 +1,5 @@
 import type { ComparisonConfig } from '@stigmergy-benchmark/core';
-import { ReportingLevel, RunType } from '@stigmergy-benchmark/core';
+import { ReportingLevel } from '@stigmergy-benchmark/core';
 import { getTask } from '@stigmergy-benchmark/tasks';
 import { ComparisonEngine } from '@stigmergy-benchmark/engine';
 import { BenchmarkStore } from '@stigmergy-benchmark/storage';

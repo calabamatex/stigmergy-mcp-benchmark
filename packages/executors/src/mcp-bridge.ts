@@ -1,4 +1,3 @@
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { TraceStore } from 'stigmergy-mcp/store';
@@ -12,7 +11,7 @@ import type { ToolDefinition } from '@stigmergy-benchmark/core';
  */
 export class McpBridge {
   private store: TraceStore;
-  private server: McpServer;
+  private server: ReturnType<typeof createServer>;
   private client: Client;
   private connected = false;
 

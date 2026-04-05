@@ -12,7 +12,7 @@ import { SingleAgentExecutor, MessagePassingExecutor, StigmergySwarmExecutor } f
 import type { RunConfig } from '@stigmergy-benchmark/executors';
 import type { LLMClient } from '@stigmergy-benchmark/llm-client';
 import { aggregateStats, computePerTrialMetrics, calibrateCrossValidation } from '@stigmergy-benchmark/stats';
-import { BenchmarkStore } from '@stigmergy-benchmark/storage';
+import type { BenchmarkStore } from '@stigmergy-benchmark/storage';
 import { crossValidateTrial } from './cross-validation.js';
 import { BenchmarkLogger } from './logger.js';
 

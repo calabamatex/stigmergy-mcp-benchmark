@@ -1,4 +1,4 @@
-import { RunType, type BenchmarkTask, type RunResult, type RunContext, type Message, type ContentBlock } from '@stigmergy-benchmark/core';
+import { RunType, type BenchmarkTask, type RunResult, type RunContext, type Message } from '@stigmergy-benchmark/core';
 import type { LLMClient } from '@stigmergy-benchmark/llm-client';
 import { TokenTracker, InstrumentedLLMClient } from '@stigmergy-benchmark/llm-client';
 import { RuleClassifier } from '@stigmergy-benchmark/classifier';

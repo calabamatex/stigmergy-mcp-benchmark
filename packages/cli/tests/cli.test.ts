@@ -8,7 +8,6 @@ import {
   type ComparisonResult,
   type DescriptiveStats,
   type CategoryVarianceProfile,
-  type CrossValidationCalibration,
 } from '@stigmergy-benchmark/core';
 
 // ============================================================
