@@ -6,11 +6,11 @@ Empirical benchmark proving stigmergic coordination reduces inter-agent token us
 
 Runs the **same task** through three architectures, measures token usage across five categories, and applies statistical rigor (bootstrap CIs, Wilcoxon signed-rank, TOST equivalence) over multiple trials.
 
-| Run | Architecture | Purpose |
-|-----|-------------|---------|
-| A | Single Agent | Autonomous cost floor (no coordination) |
-| B | Message-Passing Swarm | Control: agents share cumulative conversation history |
-| C | Stigmergy Swarm | Experimental: agents coordinate via [stigmergy-mcp](https://github.com/calabamatex/stigmergy-mcp) traces |
+| Run | Architecture          | Purpose                                                                                                  |
+| --- | --------------------- | -------------------------------------------------------------------------------------------------------- |
+| A   | Single Agent          | Autonomous cost floor (no coordination)                                                                  |
+| B   | Message-Passing Swarm | Control: agents share cumulative conversation history                                                    |
+| C   | Stigmergy Swarm       | Experimental: agents coordinate via [stigmergy-mcp](https://github.com/calabamatex/stigmergy-mcp) traces |
 
 ### Five Token Categories
 
@@ -54,15 +54,15 @@ results show <id>                       Show detailed results
 
 ### Compare Options
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--task <id>` | (required) | Task to benchmark |
-| `--trials <n>` | 10 | Number of trials (min 3) |
-| `--provider <p>` | mock | LLM provider: mock, anthropic, openai |
-| `--model <m>` | per provider | Model name |
-| `--temperature <t>` | 0 | Temperature |
-| `--skip-single-agent` | false | Skip Run A |
-| `--db <path>` | ./stigmergy-benchmark.db | SQLite path |
+| Flag                  | Default                  | Description                           |
+| --------------------- | ------------------------ | ------------------------------------- |
+| `--task <id>`         | (required)               | Task to benchmark                     |
+| `--trials <n>`        | 10                       | Number of trials (min 3)              |
+| `--provider <p>`      | mock                     | LLM provider: mock, anthropic, openai |
+| `--model <m>`         | per provider             | Model name                            |
+| `--temperature <t>`   | 0                        | Temperature                           |
+| `--skip-single-agent` | false                    | Skip Run A                            |
+| `--db <path>`         | ./stigmergy-benchmark.db | SQLite path                           |
 
 ## Dashboard
 
@@ -74,6 +74,7 @@ node packages/dashboard/dist/server.js
 ```
 
 The dashboard provides:
+
 - Task selection with configurable trials/provider
 - Live comparison progress via WebSocket
 - Results visualization with 5-category stacked bar charts
@@ -82,14 +83,14 @@ The dashboard provides:
 
 ## Benchmark Tasks
 
-| ID | Name | Agents | Category | Purpose |
-|----|------|--------|----------|---------|
-| research-report | Research Report Pipeline | 3 | Sequential | Tests CT growth in sequential handoffs |
-| multi-source-analysis | Multi-Source Analysis | 4 | Parallel | Tests parallel fan-out + synthesis |
-| code-review | Iterative Code Review | 3 | Iterative | Tests iterative refinement patterns |
-| single-agent-null | Single Agent (Null) | 1 | — | Validates instrumentation (~0% savings) |
-| tiny-handoff | Two-Agent Tiny Handoff | 2 | Sequential | Crossover detection (TOST) |
-| ten-agent-pipeline | Ten-Agent Pipeline | 10 | Sequential | Tests O(N^2) vs O(N) scaling |
+| ID                    | Name                     | Agents | Category   | Purpose                                 |
+| --------------------- | ------------------------ | ------ | ---------- | --------------------------------------- |
+| research-report       | Research Report Pipeline | 3      | Sequential | Tests CT growth in sequential handoffs  |
+| multi-source-analysis | Multi-Source Analysis    | 4      | Parallel   | Tests parallel fan-out + synthesis      |
+| code-review           | Iterative Code Review    | 3      | Iterative  | Tests iterative refinement patterns     |
+| single-agent-null     | Single Agent (Null)      | 1      | —          | Validates instrumentation (~0% savings) |
+| tiny-handoff          | Two-Agent Tiny Handoff   | 2      | Sequential | Crossover detection (TOST)              |
+| ten-agent-pipeline    | Ten-Agent Pipeline       | 10     | Sequential | Tests O(N^2) vs O(N) scaling            |
 
 ## Statistical Methodology
 
@@ -119,14 +120,49 @@ core        (types, enums, config)
   +-- dashboard   (Express + WebSocket + React frontend)
 ```
 
+## Docker
+
+```bash
+# Build and run with mock provider
+docker compose run benchmark compare --task research-report --trials 3 --provider mock
+
+# Run with real API keys
+ANTHROPIC_API_KEY=sk-... docker compose run benchmark compare --task research-report --trials 10 --provider anthropic
+```
+
+Results persist in a named Docker volume (`benchmark-data`).
+
 ## Development
 
 ```bash
-pnpm install     # Install all dependencies
-pnpm build       # Build all packages
-pnpm test        # Run all tests
-pnpm typecheck   # Type-check without emitting
+pnpm install          # Install all dependencies
+pnpm build            # Build all packages
+pnpm test             # Run all tests (169 tests)
+pnpm typecheck        # Type-check without emitting
+pnpm lint             # ESLint 9 flat config
+pnpm format:check     # Prettier check
 ```
+
+### Pre-commit Hooks
+
+[Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) run automatically on commit:
+
+- **TypeScript**: `eslint --fix` + `prettier --write`
+- **JSON/MD/YAML**: `prettier --write`
+
+Commit messages are enforced by [commitlint](https://commitlint.js.org/) (conventional commits format).
+
+### Architecture Decision Records
+
+Key design decisions are documented in [`docs/adr/`](docs/adr/):
+
+| ADR                                                   | Decision                                |
+| ----------------------------------------------------- | --------------------------------------- |
+| [001](docs/adr/001-sqlite-persistence.md)             | SQLite for benchmark persistence        |
+| [002](docs/adr/002-rule-based-classification.md)      | Rule-based token classification         |
+| [003](docs/adr/003-wilcoxon-over-t-test.md)           | Wilcoxon signed-rank over paired t-test |
+| [004](docs/adr/004-bootstrap-confidence-intervals.md) | Bootstrap CIs over analytical CIs       |
+| [005](docs/adr/005-in-memory-mcp-bridge.md)           | In-memory MCP bridge for stigmergy      |
 
 ## License
 

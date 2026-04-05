@@ -1,6 +1,7 @@
 {
   "name": "stigmergy-benchmark",
   "private": true,
+  "type": "module",
   "version": "0.1.0",
   "description": "Empirical benchmark proving stigmergic coordination reduces inter-agent token usage",
   "scripts": {
