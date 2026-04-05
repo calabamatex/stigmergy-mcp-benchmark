@@ -1,6 +1,5 @@
 import { listTasks } from '@stigmergy-benchmark/tasks';
 import { BenchmarkStore } from '@stigmergy-benchmark/storage';
-import type { ParsedArgs } from '../index.js';
 
 export function listTasksCommand(): void {
   const tasks = listTasks();
@@ -23,8 +22,7 @@ export function listTasksCommand(): void {
   console.log(`\n${tasks.length} tasks available.\n`);
 }
 
-export function listResultsCommand(args: ParsedArgs): void {
-  const dbPath = getDbPath(args);
+export function listResultsCommand(dbPath: string): void {
   const store = new BenchmarkStore(dbPath);
 
   try {
@@ -57,8 +55,4 @@ export function listResultsCommand(args: ParsedArgs): void {
 
 function pad(s: string, width: number): string {
   return s.length >= width ? s.slice(0, width) : s + ' '.repeat(width - s.length);
-}
-
-function getDbPath(args: ParsedArgs): string {
-  return (args.flags.db as string) ?? process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db';
 }

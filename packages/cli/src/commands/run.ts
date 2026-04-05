@@ -5,25 +5,28 @@ import { ComparisonEngine } from '@stigmergy-benchmark/engine';
 import { BenchmarkStore } from '@stigmergy-benchmark/storage';
 import { MockLLMClient, AnthropicClient, OpenAIClient, RetryLLMClient, RateLimitedLLMClient } from '@stigmergy-benchmark/llm-client';
 import type { LLMClient } from '@stigmergy-benchmark/llm-client';
-import type { ParsedArgs } from '../index.js';
 import { formatProgressLine, formatProvisionalStats } from '../format/progress.js';
 import { formatComparisonResult } from '../format/results.js';
 
-export async function runCompare(args: ParsedArgs): Promise<void> {
-  const taskId = args.flags.task as string;
-  if (!taskId) {
-    console.error('Error: --task <id> is required.\nUse "tasks list" to see available tasks.');
-    process.exit(1);
-  }
+export interface CompareOptions {
+  task: string;
+  trials: string;
+  provider: string;
+  model?: string;
+  temperature: string;
+  skipSingleAgent: boolean;
+  seed?: string;
+  db: string;
+  verbose: boolean;
+}
 
-  const task = getTask(taskId);
-  const trialCount = Math.max(3, Number(args.flags.trials) || 10);
-  const provider = (args.flags.provider as string) ?? 'mock';
-  const model = (args.flags.model as string) ?? getDefaultModel(provider);
-  const temperature = Number(args.flags.temperature) || 0;
-  const skipSingleAgent = args.flags['skip-single-agent'] === true;
-  const seed = args.flags.seed ? Number(args.flags.seed) : undefined;
-  const dbPath = (args.flags.db as string) ?? process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db';
+export async function runCompare(opts: CompareOptions): Promise<void> {
+  const task = getTask(opts.task);
+  const trialCount = Math.max(3, Number(opts.trials) || 10);
+  const provider = opts.provider;
+  const model = opts.model ?? getDefaultModel(provider);
+  const temperature = Number(opts.temperature) || 0;
+  const seed = opts.seed ? Number(opts.seed) : undefined;
 
   if (task.crossoverTask && trialCount < 15) {
     console.warn(`Warning: Task "${task.name}" is a crossover task. TOST requires n >= 15 for adequate power (you set ${trialCount}).`);
@@ -35,7 +38,7 @@ export async function runCompare(args: ParsedArgs): Promise<void> {
     model,
     temperature,
     promptCachingEnabled: true,
-    skipSingleAgent,
+    skipSingleAgent: opts.skipSingleAgent,
   };
 
   console.log(`\nStigmergy-MCP Token Comparison`);
@@ -43,7 +46,7 @@ export async function runCompare(args: ParsedArgs): Promise<void> {
   console.log(`${'─'.repeat(70)}\n`);
 
   const client = createClient(provider, seed);
-  const store = new BenchmarkStore(dbPath);
+  const store = new BenchmarkStore(opts.db);
   const engine = new ComparisonEngine(store, client);
 
   try {

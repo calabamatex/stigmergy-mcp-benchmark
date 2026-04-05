@@ -1,15 +1,7 @@
 import { BenchmarkStore } from '@stigmergy-benchmark/storage';
-import type { ParsedArgs } from '../index.js';
 import { formatComparisonResult } from '../format/results.js';
 
-export function showResultCommand(args: ParsedArgs): void {
-  const id = args.positional[0];
-  if (!id) {
-    console.error('Error: comparison ID is required.\nUsage: results show <id>');
-    process.exit(1);
-  }
-
-  const dbPath = (args.flags.db as string) ?? process.env.STIGMERGY_BENCHMARK_DB ?? './stigmergy-benchmark.db';
+export function showResultCommand(id: string, dbPath: string): void {
   const store = new BenchmarkStore(dbPath);
 
   try {

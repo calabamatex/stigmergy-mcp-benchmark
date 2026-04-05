@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-import { parseArgs } from '../src/index.js';
 import { formatProgressLine, formatProvisionalStats } from '../src/format/progress.js';
 import { formatComparisonResult } from '../src/format/results.js';
 import {
@@ -9,44 +8,6 @@ import {
   type DescriptiveStats,
   type CategoryVarianceProfile,
 } from '@stigmergy-benchmark/core';
-
-// ============================================================
-// Argument Parsing
-// ============================================================
-
-describe('parseArgs', () => {
-  it('parses command and subcommand', () => {
-    const result = parseArgs(['node', 'cli', 'tasks', 'list']);
-    expect(result.command).toBe('tasks');
-    expect(result.subcommand).toBe('list');
-  });
-
-  it('parses flags with values', () => {
-    const result = parseArgs(['node', 'cli', 'compare', '--task', 'my-task', '--trials', '5']);
-    expect(result.command).toBe('compare');
-    expect(result.flags.task).toBe('my-task');
-    expect(result.flags.trials).toBe('5');
-  });
-
-  it('parses boolean flags', () => {
-    const result = parseArgs(['node', 'cli', 'compare', '--task', 'x', '--skip-single-agent', '--verbose']);
-    expect(result.flags['skip-single-agent']).toBe(true);
-    expect(result.flags.verbose).toBe(true);
-  });
-
-  it('parses positional args after subcommand', () => {
-    const result = parseArgs(['node', 'cli', 'results', 'show', 'abc-123']);
-    expect(result.command).toBe('results');
-    expect(result.subcommand).toBe('show');
-    expect(result.positional).toEqual(['abc-123']);
-  });
-
-  it('handles empty args', () => {
-    const result = parseArgs(['node', 'cli']);
-    expect(result.command).toBe('');
-    expect(result.subcommand).toBeUndefined();
-  });
-});
 
 // ============================================================
 // Progress Formatting
