@@ -29,11 +29,13 @@ export const COORDINATION_PATTERNS: RegExp[] = [
  * Content transfer patterns — indicate work product being passed between agents.
  */
 export const CONTENT_TRANSFER_PATTERNS: RegExp[] = [
+  /\[content-transfer\]/i,
+  /---\s*Agent\s+\d+\s+\(.+?\)\s+output\s*---/i,
   /\bhere\s+is\s+(the|my)\s+(output|result|analysis|findings|code|review)\b/i,
   /\bthe\s+following\s+(was|is)\s+(produced|generated|found)\s+by\b/i,
   /\bagent\s+\w+('s)?\s+(output|result|analysis|response)\s*:/i,
   /\b(previous|prior)\s+agent('s)?\s+(output|work|response)\b/i,
-  /^```[\s\S]{200,}/m, // Large code blocks (>= 200 chars, likely work product)
+  /^```[\s\S]{200,}/m,
 ];
 
 /**
