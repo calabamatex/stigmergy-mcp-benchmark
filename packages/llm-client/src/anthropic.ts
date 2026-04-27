@@ -1,6 +1,35 @@
-import type { CompletionRequest, CompletionResponse, ContentBlock } from '@stigmergy-benchmark/core';
+import type {
+  CompletionRequest,
+  CompletionResponse,
+  ContentBlock,
+  Message,
+} from '@stigmergy-benchmark/core';
 import type { LLMClient } from './client.js';
 import { ApiError } from './errors.js';
+
+/**
+ * Strip trailing whitespace from any text content in a message before sending
+ * to the Anthropic API. The API rejects multi-turn conversations where any
+ * message content ends with whitespace; the error reports it as a problem with
+ * "final assistant content" but the rule applies to all roles in practice.
+ */
+function sanitizeMessage(m: Message): Message {
+  if (typeof m.content === 'string') {
+    return { ...m, content: m.content.replace(/\s+$/, '') };
+  }
+  return {
+    ...m,
+    content: m.content.map((b) => {
+      if (b.type === 'text' && typeof b.text === 'string') {
+        return { ...b, text: b.text.replace(/\s+$/, '') };
+      }
+      if (b.type === 'tool_result' && typeof b.content === 'string') {
+        return { ...b, content: b.content.replace(/\s+$/, '') };
+      }
+      return b;
+    }),
+  };
+}
 
 /**
  * Anthropic API client. Makes real API calls to Claude models.
@@ -20,18 +49,20 @@ export class AnthropicClient implements LLMClient {
 
   async complete(request: CompletionRequest): Promise<CompletionResponse> {
     // Separate system message from conversation messages
-    const systemMessages = request.messages.filter(m => m.role === 'system');
-    const conversationMessages = request.messages.filter(m => m.role !== 'system');
+    const systemMessages = request.messages.filter((m) => m.role === 'system');
+    const conversationMessages = request.messages.filter((m) => m.role !== 'system');
 
     const systemText = systemMessages
-      .map(m => typeof m.content === 'string' ? m.content : m.content.map(b => b.text ?? '').join(''))
+      .map((m) =>
+        typeof m.content === 'string' ? m.content : m.content.map((b) => b.text ?? '').join(''),
+      )
       .join('\n');
 
     const body: Record<string, unknown> = {
       model: request.model,
       max_tokens: request.maxTokens,
       temperature: request.temperature,
-      messages: conversationMessages.map(m => ({
+      messages: conversationMessages.map(sanitizeMessage).map((m) => ({
         role: m.role === 'tool' ? 'user' : m.role,
         content: m.content,
       })),
@@ -42,7 +73,7 @@ export class AnthropicClient implements LLMClient {
     }
 
     if (request.tools && request.tools.length > 0) {
-      body.tools = request.tools.map(t => ({
+      body.tools = request.tools.map((t) => ({
         name: t.name,
         description: t.description,
         input_schema: t.input_schema,
@@ -64,13 +95,19 @@ export class AnthropicClient implements LLMClient {
       throw new ApiError(response.status, errorBody, 'Anthropic');
     }
 
-    const data = await response.json() as {
-      content: Array<{ type: string; text?: string; id?: string; name?: string; input?: Record<string, unknown> }>;
+    const data = (await response.json()) as {
+      content: Array<{
+        type: string;
+        text?: string;
+        id?: string;
+        name?: string;
+        input?: Record<string, unknown>;
+      }>;
       usage: { input_tokens: number; output_tokens: number; cache_read_input_tokens?: number };
       stop_reason: string;
     };
 
-    const content: ContentBlock[] = data.content.map(block => ({
+    const content: ContentBlock[] = data.content.map((block) => ({
       type: block.type as ContentBlock['type'],
       text: block.text,
       id: block.id,
