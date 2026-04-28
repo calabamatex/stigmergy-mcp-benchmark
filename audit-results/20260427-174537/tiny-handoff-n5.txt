@@ -1,0 +1,75 @@
+Warning: Task "Two-Agent Tiny Handoff (Crossover)" is a crossover task. TOST requires n >= 15 for adequate power (you set 5).
+
+Stigmergy-MCP Token Comparison
+Task: Two-Agent Tiny Handoff (Crossover)  |  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 5
+──────────────────────────────────────────────────────────────────────
+
+Trial 1/5 ━━━────────────────────── running...  0s elapsed  Trial 1/5 ━━━────────────────────── run A...  0s elapsed  Trial 1/5 ━━━────────────────────── run B...  3s elapsed  Trial 1/5 ━━━────────────────────── run C...  14s elapsed  Trial 1/5 ━━━━━──────────────────── complete  31s elapsed, ~2m05s remaining  
+Trial 2/5 ━━━━━━━━───────────────── running...  31s elapsed  Trial 2/5 ━━━━━━━━───────────────── run A...  31s elapsed  Trial 2/5 ━━━━━━━━───────────────── run B...  34s elapsed  Trial 2/5 ━━━━━━━━───────────────── run C...  40s elapsed  Trial 2/5 ━━━━━━━━━━─────────────── complete  1m02s elapsed, ~1m33s remaining  
+Trial 3/5 ━━━━━━━━━━━━━──────────── running...  1m02s elapsed  Trial 3/5 ━━━━━━━━━━━━━──────────── run A...  1m02s elapsed  Trial 3/5 ━━━━━━━━━━━━━──────────── run B...  1m05s elapsed  Trial 3/5 ━━━━━━━━━━━━━──────────── run C...  1m11s elapsed  Trial 3/5 ━━━━━━━━━━━━━━━────────── complete  1m33s elapsed, ~1m02s remaining  
+  Provisional: inter-agent savings median -2608.7% (CIs unavailable, n < 5)
+Trial 4/5 ━━━━━━━━━━━━━━━━━━─────── running...  1m33s elapsed  Trial 4/5 ━━━━━━━━━━━━━━━━━━─────── run A...  1m33s elapsed  Trial 4/5 ━━━━━━━━━━━━━━━━━━─────── run B...  1m36s elapsed  Trial 4/5 ━━━━━━━━━━━━━━━━━━─────── run C...  1m41s elapsed  Trial 4/5 ━━━━━━━━━━━━━━━━━━━━───── complete  2m00s elapsed, ~30s remaining  
+  Provisional: inter-agent savings median -2595.1% (CIs unavailable, n < 5)
+Trial 5/5 ━━━━━━━━━━━━━━━━━━━━━━━── running...  2m00s elapsed  Trial 5/5 ━━━━━━━━━━━━━━━━━━━━━━━── run A...  2m00s elapsed  Trial 5/5 ━━━━━━━━━━━━━━━━━━━━━━━── run B...  2m04s elapsed  Trial 5/5 ━━━━━━━━━━━━━━━━━━━━━━━── run C...  2m09s elapsed  Trial 5/5 ━━━━━━━━━━━━━━━━━━━━━━━━━ complete  2m29s elapsed  
+  Preliminary: inter-agent savings median -2600.3% CI [-2619.0%, -2578.5%] (n < 10)
+
+==============================================================================
+  Stigmergy-MCP Token Comparison
+  Task: Two-Agent Tiny Handoff (Crossover)
+  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 5  |  Level: PRELIMINARY
+==============================================================================
+
+  AUTONOMOUS FLOOR (Run A: Single Agent)
+  Median: 151 tokens    IQR: [151 — 151]    CV: 0.6%
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOKEN DECOMPOSITION (medians, n=5)
+
+                              Run B         Run C         Delta     
+                              Msg-Pass      Stigmergy     
+  INTER-AGENT COMMUNICATION
+    Content Transfer          92            601           --553.3%
+    Mechanism Overhead        0             5.5k          +5.5k
+    Coordination Instr.       195           1.6k          +737.9%
+    Subtotal                  287           7.8k          +2600.3%
+  AGENT AUTONOMOUS
+    Task Reasoning            198           1.7k          +779.8%
+    System Identity           0             0             0
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOTALS
+  Total Savings:              Median: -1864.3%    95% CI: [-1892.2%, -1840.2%]    IQR: [-1880.8% — -1862.8%]
+  Effective Savings:          Median: -1864.3%    95% CI: [-1892.2%, -1840.2%]    IQR: [-1880.8% — -1862.8%]
+
+  ──────────────────────────────────────────────────────────────────────────
+  STATISTICAL ANALYSIS
+
+  Inter-Agent Savings
+    Median: -2600.3%    95% CI: [-2619.0%, -2578.5%]    IQR: [-2608.7% — -2581.5%]
+
+  Content Transfer Savings
+    Median: -553.3%    95% CI: [-576.3%, -544.1%]    IQR: [-567.4% — -547.8%]
+
+  ──────────────────────────────────────────────────────────────────────────
+  VARIANCE PROFILE (CV)
+  Category                    Run A       Run B       Run C       
+  Content Transfer            —           0.6%        2.3%
+  Mechanism Overhead          —           —           0.6%
+  Coordination Instr.         —           0.3%        0.8%
+  Task Reasoning              0.7%        3.1%        9.3%
+  System Identity             —           —           —
+
+  ──────────────────────────────────────────────────────────────────────────
+  CROSS-VALIDATION
+  Run A variance (CV): 0.6%    Calibrated threshold: 1.2%
+  Flagged trials: 5 (Run B), 5 (Run C)
+  Classification: UNRELIABLE
+
+==============================================================================
+  INTER-AGENT SAVINGS:  Median: -2600.3%    95% CI: [-2619.0%, -2578.5%]    IQR: [-2608.7% — -2581.5%]
+  EFFECTIVE SAVINGS:    Median: -1864.3%    95% CI: [-1892.2%, -1840.2%]    IQR: [-1880.8% — -1862.8%]
+==============================================================================
+
+Result saved: 1a82d359-04f7-4f61-bdee-c08389f27f48
+View again: stigmergy-benchmark results show 1a82d359-04f7-4f61-bdee-c08389f27f48
+

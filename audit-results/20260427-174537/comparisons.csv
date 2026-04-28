@@ -1,0 +1,12 @@
+id,task_id,task_name,run_time,trial_count
+635dff33-e5b8-4ce8-baca-c320c6922d81,ten-agent-pipeline,"Ten-Agent Pipeline","2026-04-27 22:38:19",0
+91c410de-7ea3-4e1b-b297-3b4034b9469e,research-report,"Research Report Pipeline","2026-04-27 22:13:08",5
+1a82d359-04f7-4f61-bdee-c08389f27f48,tiny-handoff,"Two-Agent Tiny Handoff (Crossover)","2026-04-27 21:50:47",5
+96be314c-3af2-414a-aec0-ed30cee50052,single-agent-null,"Single Agent (Null Hypothesis)","2026-04-27 21:48:17",5
+788579f9-312e-4b57-965b-f8587c57363d,tiny-handoff,"Two-Agent Tiny Handoff (Crossover)","2026-04-27 21:31:38",3
+761ce4fb-ee95-4012-be10-ac745e2571ef,tiny-handoff,"Two-Agent Tiny Handoff (Crossover)","2026-04-27 21:11:51",5
+ddc61248-f7f9-4638-a893-df9586c0c1d1,single-agent-null,"Single Agent (Null Hypothesis)","2026-04-27 21:07:02",3
+771a46f4-8379-4985-8607-887e445d1dea,ten-agent-pipeline,"Ten-Agent Pipeline","2026-04-27 21:00:38",0
+0b403759-dadc-4490-adc2-42f1b612adb1,ten-agent-pipeline,"Ten-Agent Pipeline","2026-04-27 20:54:46",3
+5ed73ad8-989f-4fce-9723-fd3657c91eb6,single-agent-null,"Single Agent (Null Hypothesis)","2026-04-27 20:54:12",3
+119e4b8e-6242-4827-b14c-e3217e6399d5,research-report,"Research Report Pipeline","2026-04-27 20:50:57",3

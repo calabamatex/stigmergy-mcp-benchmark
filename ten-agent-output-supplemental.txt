@@ -1,0 +1,70 @@
+
+Stigmergy-MCP Token Comparison
+Task: Ten-Agent Pipeline  |  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 3
+──────────────────────────────────────────────────────────────────────
+
+Trial 1/3 ━━━━───────────────────── running...  0s elapsed  Trial 1/3 ━━━━───────────────────── run A...  0s elapsed  Trial 1/3 ━━━━───────────────────── run B...  3m40s elapsed  Trial 1/3 ━━━━───────────────────── run C...  12m25s elapsed  Trial 1/3 ━━━━━━━━───────────────── complete  19m36s elapsed, ~39m12s remaining  
+Trial 2/3 ━━━━━━━━━━━━━──────────── running...  19m36s elapsed  Trial 2/3 ━━━━━━━━━━━━━──────────── run A...  19m36s elapsed  Trial 2/3 ━━━━━━━━━━━━━──────────── run B...  23m12s elapsed  Trial 2/3 ━━━━━━━━━━━━━──────────── run C...  31m45s elapsed  Trial 2/3 ━━━━━━━━━━━━━━━━━──────── complete  42m04s elapsed, ~21m02s remaining  
+Trial 3/3 ━━━━━━━━━━━━━━━━━━━━━──── running...  42m04s elapsed  Trial 3/3 ━━━━━━━━━━━━━━━━━━━━━──── run A...  42m04s elapsed  Trial 3/3 ━━━━━━━━━━━━━━━━━━━━━──── run B...  45m39s elapsed  Trial 3/3 ━━━━━━━━━━━━━━━━━━━━━──── run C...  55m06s elapsed  Trial 3/3 ━━━━━━━━━━━━━━━━━━━━━━━━━ complete  64m35s elapsed  
+  Provisional: inter-agent savings median 55.3% (CIs unavailable, n < 5)
+
+==============================================================================
+  Stigmergy-MCP Token Comparison
+  Task: Ten-Agent Pipeline
+  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 3  |  Level: PROVISIONAL
+==============================================================================
+
+  AUTONOMOUS FLOOR (Run A: Single Agent)
+  Median: 62.1k tokens    IQR: [62.1k — 62.1k]    CV: 0.0%
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOKEN DECOMPOSITION (medians, n=3)
+
+                              Run B         Run C         Delta     
+                              Msg-Pass      Stigmergy     
+  INTER-AGENT COMMUNICATION
+    Content Transfer          130.3k        28.0k         -79.2%
+    Mechanism Overhead        0             25.7k         +25.7k
+    Coordination Instr.       2.0k          8.2k          +308.3%
+    Subtotal                  132.3k        61.9k         -53.2%
+  AGENT AUTONOMOUS
+    Task Reasoning            71.9k         67.9k         -5.6%
+    System Identity           0             0             0
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOTALS
+  Total Savings:              Median: 43.2%    95% CI: [31.8%, 48.9%]    IQR: [37.5% — 46.1%]
+  Effective Savings:          Median: 43.2%    95% CI: [31.8%, 48.9%]    IQR: [37.5% — 46.1%]
+
+  ──────────────────────────────────────────────────────────────────────────
+  STATISTICAL ANALYSIS
+
+  Inter-Agent Savings
+    Median: 55.3%    95% CI: [53.2%, 58.8%]    IQR: [54.3% — 57.1%]
+
+  Content Transfer Savings
+    Median: 79.2%    95% CI: [78.5%, 86.8%]    IQR: [78.9% — 83.0%]
+
+  ──────────────────────────────────────────────────────────────────────────
+  VARIANCE PROFILE (CV)
+  Category                    Run A       Run B       Run C       
+  Content Transfer            —           16.2%       35.9%
+  Mechanism Overhead          —           —           7.4%
+  Coordination Instr.         —           1.3%        3.7%
+  Task Reasoning              0.0%        3.1%        27.5%
+  System Identity             1.3%        —           —
+
+  ──────────────────────────────────────────────────────────────────────────
+  CROSS-VALIDATION
+  Run A variance (CV): 0.0%    Calibrated threshold: 0.0%
+  Flagged trials: 3 (Run B), 3 (Run C)
+  Classification: UNRELIABLE
+
+==============================================================================
+  INTER-AGENT SAVINGS:  Median: 55.3%    95% CI: [53.2%, 58.8%]    IQR: [54.3% — 57.1%]
+  EFFECTIVE SAVINGS:    Median: 43.2%    95% CI: [31.8%, 48.9%]    IQR: [37.5% — 46.1%]
+==============================================================================
+
+Result saved: 0215a934-0852-4bdb-93e7-a65ffef67416
+View again: stigmergy-benchmark results show 0215a934-0852-4bdb-93e7-a65ffef67416
+

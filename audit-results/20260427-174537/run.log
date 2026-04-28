@@ -1,0 +1,95 @@
+========================================================================
+Stigmergy Benchmark Audit + Run Suite
+Model:    claude-sonnet-4-5
+Provider: anthropic
+Trials:   5
+Output:   ./audit-results/20260427-174537
+Started:  Mon Apr 27 17:45:37 EDT 2026
+========================================================================
+
+── Pre-flight ────────────────────────────────────────────────────────────
+Branch:       claude/copy-benchmark-files-PhLGC
+Last commit:  cc90e66 fix(classifier): detect Content Transfer in Run B handoff messages
+Dirty files:  4
+
+── Build ─────────────────────────────────────────────────────────────────
+Build complete (log: ./audit-results/20260427-174537/build.log)
+
+── Audit: savings formula ────────────────────────────────────────────────
+Saved to ./audit-results/20260427-174537/audit-grep.txt (      16 lines)
+
+── Audit: classifier fix verification ───────────────────────────────────
+OK: [content-transfer] marker present in classifier
+OK: handoff template emits [content-transfer] marker
+
+════════════════════════════════════════════════════════════════════════
+BENCHMARK SUITE
+════════════════════════════════════════════════════════════════════════
+
+── Run: Validator (null hypothesis) (single-agent-null, n=5) ──
+Saved to ./audit-results/20260427-174537/single-agent-null-n5.txt
+  INTER-AGENT SAVINGS:  Median: -3803.4%    95% CI: [-3804.5%, -3801.1%]    IQR: [-3803.4% — -3801.1%]
+  EFFECTIVE SAVINGS:    Median: -837.1%    95% CI: [-873.8%, -724.4%]    IQR: [-850.1% — -836.4%]
+Result saved: 96be314c-3af2-414a-aec0-ed30cee50052
+
+── Run: Two-agent crossover (tiny-handoff, n=5) ──
+Saved to ./audit-results/20260427-174537/tiny-handoff-n5.txt
+  INTER-AGENT SAVINGS:  Median: -2600.3%    95% CI: [-2619.0%, -2578.5%]    IQR: [-2608.7% — -2581.5%]
+  EFFECTIVE SAVINGS:    Median: -1864.3%    95% CI: [-1892.2%, -1840.2%]    IQR: [-1880.8% — -1862.8%]
+Result saved: 1a82d359-04f7-4f61-bdee-c08389f27f48
+
+── Run: Three-agent sequential (research-report, n=5) ──
+Saved to ./audit-results/20260427-174537/research-report-n5.txt
+  INTER-AGENT SAVINGS:  Median: -100.2%    95% CI: [-170.1%, 6.3%]    IQR: [-131.0% — -78.3%]
+  EFFECTIVE SAVINGS:    Median: -79.2%    95% CI: [-116.0%, 25.0%]    IQR: [-101.3% — -57.2%]
+Result saved: 91c410de-7ea3-4e1b-b297-3b4034b9469e
+
+── Run: Ten-agent scaling test (ten-agent-pipeline, n=5) ──
+Saved to ./audit-results/20260427-174537/ten-agent-pipeline-n5.txt
+  INTER-AGENT SAVINGS:  Median: 0.0%
+  EFFECTIVE SAVINGS:    Median: 0.0%
+Result saved: 635dff33-e5b8-4ce8-baca-c320c6922d81
+
+── Raw data export ──────────────────────────────────────────────────────
+Recent comparisons → ./audit-results/20260427-174537/comparisons.csv
+Token breakdown by run/category (last 24h) → ./audit-results/20260427-174537/token-breakdown.csv
+Per-trial subtotals (last 24h) → ./audit-results/20260427-174537/trial-subtotals.csv
+
+── Sanity check: Run B Content Transfer (last 24h) ──────────────────────
+run_type  category  calls  tokens
+--------  --------  -----  ------
+                    0            
+
+════════════════════════════════════════════════════════════════════════
+SUMMARY
+════════════════════════════════════════════════════════════════════════
+
+── research-report-n5 ──
+  Classification: UNRELIABLE
+  INTER-AGENT SAVINGS:  Median: -100.2%    95% CI: [-170.1%, 6.3%]    IQR: [-131.0% — -78.3%]
+  EFFECTIVE SAVINGS:    Median: -79.2%    95% CI: [-116.0%, 25.0%]    IQR: [-101.3% — -57.2%]
+
+── single-agent-null-n5 ──
+  Classification: UNRELIABLE
+  INTER-AGENT SAVINGS:  Median: -3803.4%    95% CI: [-3804.5%, -3801.1%]    IQR: [-3803.4% — -3801.1%]
+  EFFECTIVE SAVINGS:    Median: -837.1%    95% CI: [-873.8%, -724.4%]    IQR: [-850.1% — -836.4%]
+
+── ten-agent-pipeline-n5 ──
+  Classification: UNRELIABLE
+  INTER-AGENT SAVINGS:  Median: 0.0%
+  EFFECTIVE SAVINGS:    Median: 0.0%
+
+── tiny-handoff-n5 ──
+  Classification: UNRELIABLE
+  INTER-AGENT SAVINGS:  Median: -2600.3%    95% CI: [-2619.0%, -2578.5%]    IQR: [-2608.7% — -2581.5%]
+  EFFECTIVE SAVINGS:    Median: -1864.3%    95% CI: [-1892.2%, -1840.2%]    IQR: [-1880.8% — -1862.8%]
+
+Finished: Mon Apr 27 18:38:19 EDT 2026
+All artifacts in: ./audit-results/20260427-174537
+
+Files of interest:
+  ./audit-results/20260427-174537/run.log               — full transcript
+  ./audit-results/20260427-174537/audit-grep.txt        — savings formula source review
+  ./audit-results/20260427-174537/comparisons.csv       — recent comparison runs
+  ./audit-results/20260427-174537/token-breakdown.csv   — tokens by run_type × category
+  ./audit-results/20260427-174537/trial-subtotals.csv   — per-trial inter-agent math (audit-ready)

@@ -1,0 +1,73 @@
+
+Stigmergy-MCP Token Comparison
+Task: Ten-Agent Pipeline  |  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 5
+──────────────────────────────────────────────────────────────────────
+
+Trial 1/5 ━━━────────────────────── running...  0s elapsed  Trial 1/5 ━━━────────────────────── run A...  0s elapsed  Trial 1/5 ━━━────────────────────── run B...  3m39s elapsed  
+  Trial 1 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"messages: final assistant content cannot end with trailing whitespace"},"request_id":"req_011CaV44AmgRPjbUiipFQUfe"}
+Trial 2/5 ━━━━━━━━───────────────── running...  6m40s elapsed  Trial 2/5 ━━━━━━━━───────────────── run A...  6m40s elapsed  
+  Trial 2 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"messages: final assistant content cannot end with trailing whitespace"},"request_id":"req_011CaV4DrVNSk1r4pm1sSXW7"}
+Trial 3/5 ━━━━━━━━━━━━━──────────── running...  8m52s elapsed  Trial 3/5 ━━━━━━━━━━━━━──────────── run A...  8m52s elapsed  Trial 3/5 ━━━━━━━━━━━━━──────────── run B...  12m23s elapsed  Trial 3/5 ━━━━━━━━━━━━━──────────── run C...  21m50s elapsed  
+  Trial 3 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"messages: final assistant content cannot end with trailing whitespace"},"request_id":"req_011CaV5U4Yv21MCPfUmaLeqT"}
+Aborting: 3/3 trials failed (>2 threshold)
+
+==============================================================================
+  Stigmergy-MCP Token Comparison
+  Task: Ten-Agent Pipeline
+  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 0  |  Level: RAW_ONLY
+==============================================================================
+
+  AUTONOMOUS FLOOR (Run A: Single Agent)
+  Median: 0 tokens    CV: —
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOKEN DECOMPOSITION (medians, n=0)
+
+                              Run B         Run C         Delta     
+                              Msg-Pass      Stigmergy     
+  INTER-AGENT COMMUNICATION
+    Content Transfer          0             0             -0.0%
+    Mechanism Overhead        0             0             0
+    Coordination Instr.       0             0             0
+    Subtotal                  0             0             0
+  AGENT AUTONOMOUS
+    Task Reasoning            0             0             0
+    System Identity           0             0             0
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOTALS
+  Total Savings:              Median: 0.0%
+  Effective Savings:          Median: 0.0%
+
+  ──────────────────────────────────────────────────────────────────────────
+  STATISTICAL ANALYSIS
+
+  Inter-Agent Savings
+    Median: 0.0%
+
+  Content Transfer Savings
+    Median: 0.0%
+
+  ──────────────────────────────────────────────────────────────────────────
+  VARIANCE PROFILE (CV)
+  Category                    Run A       Run B       Run C       
+  Content Transfer            —           —           —
+  Mechanism Overhead          —           —           —
+  Coordination Instr.         —           —           —
+  Task Reasoning              —           —           —
+  System Identity             —           —           —
+
+  ──────────────────────────────────────────────────────────────────────────
+  CROSS-VALIDATION
+  Run A variance (CV): —    Calibrated threshold: —
+  Flagged trials: 0 (Run B), 0 (Run C)
+  Classification: UNRELIABLE
+
+==============================================================================
+  INTER-AGENT SAVINGS:  Median: 0.0%
+  EFFECTIVE SAVINGS:    Median: 0.0%
+==============================================================================
+
+Result saved: 635dff33-e5b8-4ce8-baca-c320c6922d81
+View again: stigmergy-benchmark results show 635dff33-e5b8-4ce8-baca-c320c6922d81
+

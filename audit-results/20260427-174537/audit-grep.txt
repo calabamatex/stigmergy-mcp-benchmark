@@ -1,0 +1,16 @@
+=== grep: savings calculation ===
+packages/stats/src/aggregator.ts:34:  const interAgentSavings = computeDescriptiveStats(
+packages/stats/src/aggregator.ts:35:    perTrialMetrics.map(m => m.interAgentSavingsPercent),
+packages/stats/src/aggregator.ts:43:  const effectiveSavings = computeDescriptiveStats(
+packages/stats/src/aggregator.ts:44:    perTrialMetrics.map(m => m.effectiveSavingsPercent),
+packages/stats/src/aggregator.ts:55:    interAgentSavings,
+packages/stats/src/aggregator.ts:58:    effectiveSavings,
+packages/stats/src/aggregator.ts:82:      ? wilcoxonSignedRank(perTrialMetrics.map(m => m.interAgentSavingsPercent))
+packages/stats/src/aggregator.ts:89:          perTrialMetrics.map(m => m.interAgentSavingsPercent),
+packages/stats/src/tost.ts:49:      : `Cannot confirm equivalence — savings may exceed ±${equivalenceMargin}%`,
+packages/stats/src/metrics.ts:16:    interAgentSavingsPercent: safePct(b.interAgentTokens, c.interAgentTokens),
+packages/stats/src/metrics.ts:19:    effectiveSavingsPercent: safePct(b.effectiveTokens, c.effectiveTokens),
+
+=== grep: token attribution (runType usage) ===
+packages/llm-client/src/token-tracker.ts:19: * Each record is tagged with the run context (runId, trialIndex, agentId, runType).
+packages/llm-client/src/token-tracker.ts:44:        runType: context.runType as RunType,

@@ -1,0 +1,41 @@
+
+> stigmergy-benchmark@0.1.0 build /Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark
+> pnpm -r build
+
+Scope: 12 of 13 workspace projects
+packages/core build$ tsc
+packages/stigmergy-mcp build$ tsc
+packages/core build: Done
+packages/stigmergy-mcp build: Done
+packages/storage build$ tsc
+packages/classifier build$ tsc
+packages/llm-client build$ tsc
+packages/stats build$ tsc
+packages/storage build: Done
+packages/tasks build$ tsc
+packages/classifier build: Done
+packages/stats build: Done
+packages/llm-client build: Done
+packages/tasks build: Done
+packages/executors build$ tsc
+packages/executors build: Done
+packages/engine build$ tsc
+packages/engine build: Done
+packages/cli build$ tsc
+packages/dashboard build$ tsc && cd frontend && npx vite build --outDir ../dist/public
+packages/cli build: Done
+packages/dashboard build: vite v5.4.21 building for production...
+packages/dashboard build: (!) outDir /Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/packages/dashboard/dist/public is not inside project root and will not be emptied.
+packages/dashboard build: Use --emptyOutDir to override.
+packages/dashboard build: transforming...
+packages/dashboard build: ✓ 834 modules transformed.
+packages/dashboard build: rendering chunks...
+packages/dashboard build: computing gzip size...
+packages/dashboard build: ../dist/public/index.html                  0.32 kB │ gzip:   0.25 kB
+packages/dashboard build: ../dist/public/assets/index-BCaormkA.js  519.31 kB │ gzip: 150.84 kB
+packages/dashboard build: ✓ built in 1.33s
+packages/dashboard build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/dashboard build: - Using dynamic import() to code-split the application
+packages/dashboard build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/dashboard build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/dashboard build: Done
