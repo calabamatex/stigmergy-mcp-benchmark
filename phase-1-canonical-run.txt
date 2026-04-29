@@ -1,0 +1,89 @@
+
+Stigmergy-MCP Token Comparison
+Task: Ten-Agent Pipeline  |  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 10
+──────────────────────────────────────────────────────────────────────
+
+Trial 1/10 ━──────────────────────── running...  0s elapsed  Trial 1/10 ━──────────────────────── run A...  0s elapsed  Trial 1/10 ━──────────────────────── run B...  3m32s elapsed  Trial 1/10 ━──────────────────────── run C...  12m52s elapsed  Trial 1/10 ━━━────────────────────── complete  22m38s elapsed, ~203m43s remaining  
+Trial 2/10 ━━━━───────────────────── running...  22m38s elapsed  Trial 2/10 ━━━━───────────────────── run A...  22m38s elapsed  Trial 2/10 ━━━━───────────────────── run B...  26m13s elapsed  Trial 2/10 ━━━━───────────────────── run C...  35m01s elapsed  Trial 2/10 ━━━━━──────────────────── complete  45m27s elapsed, ~181m47s remaining  
+Trial 3/10 ━━━━━━─────────────────── running...  45m27s elapsed  Trial 3/10 ━━━━━━─────────────────── run A...  45m27s elapsed  Trial 3/10 ━━━━━━─────────────────── run B...  49m07s elapsed  Trial 3/10 ━━━━━━─────────────────── run C...  57m27s elapsed  Trial 3/10 ━━━━━━━━───────────────── complete  67m11s elapsed, ~156m45s remaining  
+  Provisional: inter-agent savings median 41.4% (CIs unavailable, n < 5)
+Trial 4/10 ━━━━━━━━━──────────────── running...  67m11s elapsed  Trial 4/10 ━━━━━━━━━──────────────── run A...  67m11s elapsed  Trial 4/10 ━━━━━━━━━──────────────── run B...  70m37s elapsed  Trial 4/10 ━━━━━━━━━──────────────── run C...  81m36s elapsed  Trial 4/10 ━━━━━━━━━━─────────────── complete  90m35s elapsed, ~135m52s remaining  
+  Provisional: inter-agent savings median 47.5% (CIs unavailable, n < 5)
+Trial 5/10 ━━━━━━━━━━━────────────── running...  90m35s elapsed  Trial 5/10 ━━━━━━━━━━━────────────── run A...  90m35s elapsed  Trial 5/10 ━━━━━━━━━━━────────────── run B...  94m02s elapsed  Trial 5/10 ━━━━━━━━━━━────────────── run C...  103m11s elapsed  Trial 5/10 ━━━━━━━━━━━━━──────────── complete  113m10s elapsed, ~113m10s remaining  
+  Preliminary: inter-agent savings median 49.1% CI [36.4%, 54.6%] (n < 10)
+Trial 6/10 ━━━━━━━━━━━━━━─────────── running...  113m10s elapsed  Trial 6/10 ━━━━━━━━━━━━━━─────────── run A...  113m10s elapsed  Trial 6/10 ━━━━━━━━━━━━━━─────────── run B...  116m47s elapsed  Trial 6/10 ━━━━━━━━━━━━━━─────────── run C...  126m36s elapsed  Trial 6/10 ━━━━━━━━━━━━━━━────────── complete  137m36s elapsed, ~91m44s remaining  
+  Preliminary: inter-agent savings median 45.3% CI [34.0%, 54.1%] (n < 10)
+Trial 7/10 ━━━━━━━━━━━━━━━━───────── running...  137m36s elapsed  Trial 7/10 ━━━━━━━━━━━━━━━━───────── run A...  137m36s elapsed  Trial 7/10 ━━━━━━━━━━━━━━━━───────── run B...  141m13s elapsed  Trial 7/10 ━━━━━━━━━━━━━━━━───────── run C...  150m39s elapsed  Trial 7/10 ━━━━━━━━━━━━━━━━━━─────── complete  160m14s elapsed, ~68m40s remaining  
+  Preliminary: inter-agent savings median 49.1% CI [36.4%, 53.5%] (n < 10)
+Trial 8/10 ━━━━━━━━━━━━━━━━━━━────── running...  160m14s elapsed  Trial 8/10 ━━━━━━━━━━━━━━━━━━━────── run A...  160m14s elapsed  Trial 8/10 ━━━━━━━━━━━━━━━━━━━────── run B...  163m46s elapsed  Trial 8/10 ━━━━━━━━━━━━━━━━━━━────── run C...  173m14s elapsed  Trial 8/10 ━━━━━━━━━━━━━━━━━━━━───── complete  184m59s elapsed, ~46m15s remaining  
+  Preliminary: inter-agent savings median 45.3% CI [36.4%, 53.5%] (n < 10)
+Trial 9/10 ━━━━━━━━━━━━━━━━━━━━━──── running...  184m59s elapsed  Trial 9/10 ━━━━━━━━━━━━━━━━━━━━━──── run A...  184m59s elapsed  Trial 9/10 ━━━━━━━━━━━━━━━━━━━━━──── run B...  188m38s elapsed  Trial 9/10 ━━━━━━━━━━━━━━━━━━━━━──── run C...  197m49s elapsed  Trial 9/10 ━━━━━━━━━━━━━━━━━━━━━━━── complete  208m39s elapsed, ~23m11s remaining  
+  Preliminary: inter-agent savings median 49.1% CI [36.4%, 54.6%] (n < 10)
+Trial 10/10 ━━━━━━━━━━━━━━━━━━━━━━━━─ running...  208m39s elapsed  Trial 10/10 ━━━━━━━━━━━━━━━━━━━━━━━━─ run A...  208m39s elapsed  Trial 10/10 ━━━━━━━━━━━━━━━━━━━━━━━━─ run B...  212m08s elapsed  Trial 10/10 ━━━━━━━━━━━━━━━━━━━━━━━━─ run C...  223m00s elapsed  Trial 10/10 ━━━━━━━━━━━━━━━━━━━━━━━━━ complete  232m47s elapsed  
+  inter-agent savings median 46.3% CI [38.0%, 53.5%]
+
+==============================================================================
+  Stigmergy-MCP Token Comparison
+  Task: Ten-Agent Pipeline
+  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 10  |  Level: FULL
+==============================================================================
+
+  AUTONOMOUS FLOOR (Run A: Single Agent)
+  Median: 62.1k tokens    IQR: [62.1k — 62.1k]    CV: 0.0%
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOKEN DECOMPOSITION (medians, n=10)
+
+                              Run B         Run C         Delta     
+                              Msg-Pass      Stigmergy     
+  INTER-AGENT COMMUNICATION
+    Content Transfer          127.3k        36.7k         -71.9%
+    Mechanism Overhead        0             25.5k         +25.5k
+    Coordination Instr.       2.1k          8.1k          +288.4%
+    Subtotal                  129.4k        70.4k         -45.6%
+  AGENT AUTONOMOUS
+    Task Reasoning            77.2k         75.9k         -1.7%
+    System Identity           0             0             0
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOTALS
+  Total Savings:              Median: 30.1%    95% CI: [20.0%, 37.5%]    IQR: [22.4% — 36.8%]
+  Effective Savings:          Median: 30.1%    95% CI: [20.0%, 37.5%]    IQR: [22.4% — 36.8%]
+
+  ──────────────────────────────────────────────────────────────────────────
+  STATISTICAL ANALYSIS
+
+  Inter-Agent Savings
+    Median: 46.3%    95% CI: [38.0%, 53.5%]    IQR: [38.9% — 53.2%]
+    Wilcoxon p = 0.0020 ✓
+
+  Content Transfer Savings
+    Median: 71.9%    95% CI: [67.2%, 76.0%]    IQR: [67.7% — 75.8%]
+
+  Total Savings
+    Median: 30.1%    95% CI: [20.0%, 37.5%]    IQR: [22.4% — 36.8%]
+    Wilcoxon p = 0.0020 ✓
+
+  ──────────────────────────────────────────────────────────────────────────
+  VARIANCE PROFILE (CV)
+  Category                    Run A       Run B       Run C       
+  Content Transfer            —           15.0%       13.0%
+  Mechanism Overhead          —           —           2.4%
+  Coordination Instr.         —           6.2%        2.5%
+  Task Reasoning              0.0%        13.1%       19.3%
+  System Identity             0.8%        —           —
+
+  ──────────────────────────────────────────────────────────────────────────
+  CROSS-VALIDATION
+  Run A variance (CV): 0.0%    Calibrated threshold: 0.0%
+  Flagged trials: 10 (Run B), 10 (Run C)
+  Classification: UNRELIABLE
+
+==============================================================================
+  INTER-AGENT SAVINGS:  Median: 46.3%    95% CI: [38.0%, 53.5%]    IQR: [38.9% — 53.2%]
+  EFFECTIVE SAVINGS:    Median: 30.1%    95% CI: [20.0%, 37.5%]    IQR: [22.4% — 36.8%]
+==============================================================================
+
+Result saved: c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00
+View again: stigmergy-benchmark results show c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00
+
