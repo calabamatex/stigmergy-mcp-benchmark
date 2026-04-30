@@ -1,0 +1,102 @@
+comparison_id,task_id,task_name,trial_index,mp_chars,mp_words,mp_sections,mp_topics_covered,mp_code_blocks,st_chars,st_words,st_sections,st_topics_covered,st_code_blocks
+89976549-1b4e-4233-84cb-fa0f347e3286,seven-agent-pipeline,Seven-Agent Pipeline,0,6118,650,17,9,3,7153,867,10,8,7
+89976549-1b4e-4233-84cb-fa0f347e3286,seven-agent-pipeline,Seven-Agent Pipeline,1,4195,492,11,9,8,6716,792,9,9,9
+89976549-1b4e-4233-84cb-fa0f347e3286,seven-agent-pipeline,Seven-Agent Pipeline,2,3689,412,7,8,1,6994,840,10,8,10
+89976549-1b4e-4233-84cb-fa0f347e3286,seven-agent-pipeline,Seven-Agent Pipeline,3,1535,218,7,10,0,6332,729,9,9,8
+89976549-1b4e-4233-84cb-fa0f347e3286,seven-agent-pipeline,Seven-Agent Pipeline,4,3507,374,10,9,2,7530,886,10,8,7
+89976549-1b4e-4233-84cb-fa0f347e3286,seven-agent-pipeline,Seven-Agent Pipeline,5,4597,545,7,8,2,7157,846,10,9,9
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,0,7239,670,6,9,3,11718,1252,16,9,13
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,1,8544,891,16,10,4,8496,922,2,7,9
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,2,11389,1242,26,9,5,5245,555,16,7,3
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,3,6084,577,6,9,2,7828,819,2,4,8
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,4,9345,983,18,10,6,9302,1025,7,9,9
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,5,9199,976,7,10,4,8747,966,4,8,13
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,6,10350,1098,7,9,5,6981,739,12,8,12
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,7,4661,473,6,7,1,9003,1217,7,9,1
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,8,2393,296,16,10,0,12085,1375,13,8,11
+600dbdb3-921b-4316-a4a9-d7bc5489aaa9,six-agent-pipeline,Six-Agent Pipeline,9,5690,698,6,8,2,9569,1043,12,7,13
+5ed581a5-9d1b-4e18-83df-b82b50551a5c,five-agent-pipeline,Five-Agent Pipeline,0,438,60,5,6,0,12914,1494,8,7,11
+5ed581a5-9d1b-4e18-83df-b82b50551a5c,five-agent-pipeline,Five-Agent Pipeline,1,1385,190,5,10,0,8186,963,9,7,7
+5ed581a5-9d1b-4e18-83df-b82b50551a5c,five-agent-pipeline,Five-Agent Pipeline,2,5664,669,13,10,1,9849,1095,8,8,12
+5ed581a5-9d1b-4e18-83df-b82b50551a5c,five-agent-pipeline,Five-Agent Pipeline,3,14142,1353,25,10,6,1283,166,5,8,0
+5ed581a5-9d1b-4e18-83df-b82b50551a5c,five-agent-pipeline,Five-Agent Pipeline,4,4444,449,4,6,3,1260,141,1,1,0
+5ed581a5-9d1b-4e18-83df-b82b50551a5c,five-agent-pipeline,Five-Agent Pipeline,5,2053,302,15,8,0,355,47,0,5,0
+5ed581a5-9d1b-4e18-83df-b82b50551a5c,five-agent-pipeline,Five-Agent Pipeline,6,9126,980,17,9,4,12845,1440,9,8,12
+264f8eeb-40d4-4a1d-a44d-cfbebba763a2,six-agent-pipeline,Six-Agent Pipeline,0,58,9,0,0,0,59,9,0,0,0
+264f8eeb-40d4-4a1d-a44d-cfbebba763a2,six-agent-pipeline,Six-Agent Pipeline,1,59,9,0,0,0,59,9,0,0,0
+264f8eeb-40d4-4a1d-a44d-cfbebba763a2,six-agent-pipeline,Six-Agent Pipeline,2,59,9,0,0,0,59,9,0,0,0
+cf80f00a-3257-459d-9cb5-211063cd6c3b,eight-agent-pipeline,Eight-Agent Pipeline,0,58,9,0,0,0,59,9,0,0,0
+cf80f00a-3257-459d-9cb5-211063cd6c3b,eight-agent-pipeline,Eight-Agent Pipeline,1,59,9,0,0,0,59,9,0,0,0
+cf80f00a-3257-459d-9cb5-211063cd6c3b,eight-agent-pipeline,Eight-Agent Pipeline,2,59,9,0,0,0,59,9,0,0,0
+8e04d614-a287-479f-a10d-17447ef4ec9f,seven-agent-pipeline,Seven-Agent Pipeline,0,58,9,0,0,0,59,9,0,0,0
+8e04d614-a287-479f-a10d-17447ef4ec9f,seven-agent-pipeline,Seven-Agent Pipeline,1,59,9,0,0,0,59,9,0,0,0
+8e04d614-a287-479f-a10d-17447ef4ec9f,seven-agent-pipeline,Seven-Agent Pipeline,2,59,9,0,0,0,59,9,0,0,0
+c99ed8f7-8e6e-4fcd-bce8-a403af0a6ebb,six-agent-pipeline,Six-Agent Pipeline,0,58,9,0,0,0,59,9,0,0,0
+c99ed8f7-8e6e-4fcd-bce8-a403af0a6ebb,six-agent-pipeline,Six-Agent Pipeline,1,59,9,0,0,0,59,9,0,0,0
+c99ed8f7-8e6e-4fcd-bce8-a403af0a6ebb,six-agent-pipeline,Six-Agent Pipeline,2,59,9,0,0,0,59,9,0,0,0
+4ed5c990-4640-40bf-a7d9-770126072f0d,five-agent-pipeline,Five-Agent Pipeline,0,58,9,0,0,0,59,9,0,0,0
+4ed5c990-4640-40bf-a7d9-770126072f0d,five-agent-pipeline,Five-Agent Pipeline,1,59,9,0,0,0,59,9,0,0,0
+4ed5c990-4640-40bf-a7d9-770126072f0d,five-agent-pipeline,Five-Agent Pipeline,2,59,9,0,0,0,59,9,0,0,0
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,0,4241,481,20,10,2,11035,1275,14,3,8
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,1,1846,235,1,4,0,13159,1374,8,4,7
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,2,4855,455,3,4,1,13385,1387,7,4,14
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,3,4155,534,11,10,2,13202,1402,9,5,13
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,4,4293,604,10,10,1,13622,1377,9,5,12
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,5,4494,491,10,9,2,13490,1444,23,10,9
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,6,2693,331,20,10,0,13369,1307,12,3,13
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,7,2768,366,20,10,1,720,115,10,10,0
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,8,4528,541,20,10,2,10392,1181,10,10,7
+c8e5cfb5-574b-4ffc-b0ad-7d0a3823cf00,ten-agent-pipeline,Ten-Agent Pipeline,9,7778,799,10,10,5,12997,1295,8,4,11
+0215a934-0852-4bdb-93e7-a65ffef67416,ten-agent-pipeline,Ten-Agent Pipeline,0,2423,342,10,10,0,13219,1266,13,3,10
+0215a934-0852-4bdb-93e7-a65ffef67416,ten-agent-pipeline,Ten-Agent Pipeline,1,2394,335,10,10,0,1,0,0,0,0
+0215a934-0852-4bdb-93e7-a65ffef67416,ten-agent-pipeline,Ten-Agent Pipeline,2,3738,433,10,10,0,13402,1394,11,4,17
+c80a64be-716e-4cd4-aa1a-b206e2578b52,ten-agent-pipeline,Ten-Agent Pipeline,0,3639,376,10,10,2,13694,1410,11,5,10
+c80a64be-716e-4cd4-aa1a-b206e2578b52,ten-agent-pipeline,Ten-Agent Pipeline,1,2712,363,33,4,0,12343,1207,18,10,6
+c80a64be-716e-4cd4-aa1a-b206e2578b52,ten-agent-pipeline,Ten-Agent Pipeline,2,5057,512,10,10,3,13737,1413,11,7,13
+c80a64be-716e-4cd4-aa1a-b206e2578b52,ten-agent-pipeline,Ten-Agent Pipeline,3,7965,891,20,9,3,13610,1446,11,4,8
+c80a64be-716e-4cd4-aa1a-b206e2578b52,ten-agent-pipeline,Ten-Agent Pipeline,4,8517,893,20,10,3,13156,1411,10,10,13
+c80a64be-716e-4cd4-aa1a-b206e2578b52,ten-agent-pipeline,Ten-Agent Pipeline,5,2412,316,18,10,0,13101,1270,9,5,13
+c80a64be-716e-4cd4-aa1a-b206e2578b52,ten-agent-pipeline,Ten-Agent Pipeline,6,1074,152,1,3,0,13272,1487,25,4,20
+21cd10ea-19f9-4632-8e3a-a40e3c077ffe,ten-agent-pipeline,Ten-Agent Pipeline,0,4534,503,10,10,2,13031,1344,7,6,11
+21cd10ea-19f9-4632-8e3a-a40e3c077ffe,ten-agent-pipeline,Ten-Agent Pipeline,1,4649,600,10,10,2,7682,886,20,10,5
+7c10e9ed-0ad8-4b4f-b149-cffb75fda42b,single-agent-null,Single Agent (Null Hypothesis),0,1634,277,3,0,2,1457,230,4,0,0
+7c10e9ed-0ad8-4b4f-b149-cffb75fda42b,single-agent-null,Single Agent (Null Hypothesis),1,1634,277,3,0,2,1457,230,4,0,0
+7c10e9ed-0ad8-4b4f-b149-cffb75fda42b,single-agent-null,Single Agent (Null Hypothesis),2,1809,295,3,0,4,1457,230,4,0,0
+8a3c91d3-59f1-48a0-8085-ff777c67250a,single-agent-null,Single Agent (Null Hypothesis),0,1634,277,3,0,2,208,37,0,0,0
+8a3c91d3-59f1-48a0-8085-ff777c67250a,single-agent-null,Single Agent (Null Hypothesis),1,1644,288,3,0,2,1457,230,4,0,0
+8a3c91d3-59f1-48a0-8085-ff777c67250a,single-agent-null,Single Agent (Null Hypothesis),2,1819,297,3,0,4,220,31,0,0,0
+91c410de-7ea3-4e1b-b297-3b4034b9469e,research-report,Research Report Pipeline,0,957,122,1,0,0,929,128,2,0,0
+91c410de-7ea3-4e1b-b297-3b4034b9469e,research-report,Research Report Pipeline,1,10581,1393,36,1,1,1067,147,5,0,0
+91c410de-7ea3-4e1b-b297-3b4034b9469e,research-report,Research Report Pipeline,2,9017,1230,28,0,0,931,127,1,0,0
+91c410de-7ea3-4e1b-b297-3b4034b9469e,research-report,Research Report Pipeline,3,11497,1559,38,0,1,1298,174,4,0,0
+91c410de-7ea3-4e1b-b297-3b4034b9469e,research-report,Research Report Pipeline,4,9314,1249,26,1,1,2414,332,6,0,0
+1a82d359-04f7-4f61-bdee-c08389f27f48,tiny-handoff,Two-Agent Tiny Handoff (Crossover),0,770,103,0,1,0,520,67,1,1,0
+1a82d359-04f7-4f61-bdee-c08389f27f48,tiny-handoff,Two-Agent Tiny Handoff (Crossover),1,766,103,0,1,0,458,63,0,1,0
+1a82d359-04f7-4f61-bdee-c08389f27f48,tiny-handoff,Two-Agent Tiny Handoff (Crossover),2,670,88,0,1,0,507,71,1,1,0
+1a82d359-04f7-4f61-bdee-c08389f27f48,tiny-handoff,Two-Agent Tiny Handoff (Crossover),3,670,88,0,1,0,243,33,0,0,0
+1a82d359-04f7-4f61-bdee-c08389f27f48,tiny-handoff,Two-Agent Tiny Handoff (Crossover),4,770,103,0,1,0,483,64,0,1,0
+96be314c-3af2-414a-aec0-ed30cee50052,single-agent-null,Single Agent (Null Hypothesis),0,1809,295,3,0,4,1457,230,4,0,0
+96be314c-3af2-414a-aec0-ed30cee50052,single-agent-null,Single Agent (Null Hypothesis),1,1629,281,4,0,2,1452,230,4,0,0
+96be314c-3af2-414a-aec0-ed30cee50052,single-agent-null,Single Agent (Null Hypothesis),2,1645,276,4,0,2,1457,230,4,0,0
+96be314c-3af2-414a-aec0-ed30cee50052,single-agent-null,Single Agent (Null Hypothesis),3,1629,281,4,0,2,1457,230,4,0,0
+96be314c-3af2-414a-aec0-ed30cee50052,single-agent-null,Single Agent (Null Hypothesis),4,1548,264,3,0,2,165,22,0,0,0
+788579f9-312e-4b57-965b-f8587c57363d,tiny-handoff,Two-Agent Tiny Handoff (Crossover),0,670,88,0,1,0,500,67,0,1,0
+788579f9-312e-4b57-965b-f8587c57363d,tiny-handoff,Two-Agent Tiny Handoff (Crossover),1,670,88,0,1,0,486,68,1,1,0
+788579f9-312e-4b57-965b-f8587c57363d,tiny-handoff,Two-Agent Tiny Handoff (Crossover),2,770,103,0,1,0,442,63,0,1,0
+761ce4fb-ee95-4012-be10-ac745e2571ef,tiny-handoff,Two-Agent Tiny Handoff (Crossover),0,711,92,0,1,0,500,70,1,1,0
+761ce4fb-ee95-4012-be10-ac745e2571ef,tiny-handoff,Two-Agent Tiny Handoff (Crossover),1,686,92,0,1,0,633,87,1,1,0
+761ce4fb-ee95-4012-be10-ac745e2571ef,tiny-handoff,Two-Agent Tiny Handoff (Crossover),2,679,92,0,1,0,505,71,1,1,0
+761ce4fb-ee95-4012-be10-ac745e2571ef,tiny-handoff,Two-Agent Tiny Handoff (Crossover),3,658,85,0,1,0,454,63,0,1,0
+761ce4fb-ee95-4012-be10-ac745e2571ef,tiny-handoff,Two-Agent Tiny Handoff (Crossover),4,657,83,0,1,0,547,74,1,1,0
+ddc61248-f7f9-4638-a893-df9586c0c1d1,single-agent-null,Single Agent (Null Hypothesis),0,1533,248,4,0,0,440,68,0,0,0
+ddc61248-f7f9-4638-a893-df9586c0c1d1,single-agent-null,Single Agent (Null Hypothesis),1,1526,246,4,0,0,440,68,0,0,0
+ddc61248-f7f9-4638-a893-df9586c0c1d1,single-agent-null,Single Agent (Null Hypothesis),2,1509,241,4,0,0,302,46,0,0,0
+0b403759-dadc-4490-adc2-42f1b612adb1,ten-agent-pipeline,Ten-Agent Pipeline,0,59,9,0,0,0,59,9,0,0,0
+0b403759-dadc-4490-adc2-42f1b612adb1,ten-agent-pipeline,Ten-Agent Pipeline,1,59,9,0,0,0,59,9,0,0,0
+0b403759-dadc-4490-adc2-42f1b612adb1,ten-agent-pipeline,Ten-Agent Pipeline,2,59,9,0,0,0,59,9,0,0,0
+5ed73ad8-989f-4fce-9723-fd3657c91eb6,single-agent-null,Single Agent (Null Hypothesis),0,58,9,0,0,0,58,9,0,0,0
+5ed73ad8-989f-4fce-9723-fd3657c91eb6,single-agent-null,Single Agent (Null Hypothesis),1,58,9,0,0,0,58,9,0,0,0
+5ed73ad8-989f-4fce-9723-fd3657c91eb6,single-agent-null,Single Agent (Null Hypothesis),2,58,9,0,0,0,58,9,0,0,0
+119e4b8e-6242-4827-b14c-e3217e6399d5,research-report,Research Report Pipeline,0,58,9,0,0,0,58,9,0,0,0
+119e4b8e-6242-4827-b14c-e3217e6399d5,research-report,Research Report Pipeline,1,59,9,0,0,0,59,9,0,0,0
+119e4b8e-6242-4827-b14c-e3217e6399d5,research-report,Research Report Pipeline,2,59,9,0,0,0,59,9,0,0,0

@@ -1,0 +1,132 @@
+ 
+  - job_name: 'api'
+    static_configs:
+      - targets: ['api:3000']
+    metrics_path: '/metrics'
+```
+
+### Integrating Monitoring into Application
+
+```javascript
+// src/app.js
+const express = require('express');
+const { initErrorTracking, errorHandler } = require('./monitoring/errorTracking');
+const { metricsMiddleware, metricsEndpoint } = require('./middleware/metrics');
+const { requestLogger } = require('./utils/logger');
+const healthRoutes = require('./routes/health.routes');
+const routes = require('./routes');
+
+const app = express();
+
+// Initialize monitoring
+initErrorTracking(app);
+
+// Middleware
+app.use(express.json());
+app.use(requestLogger);
+app.use(metricsMiddleware);
+
+// Health and metrics endpoints
+app.use(healthRoutes);
+app.get('/metrics', metricsEndpoint);
+
+// API routes
+app.use('/api/v1', routes);
+
+// Error handling
+app.use(errorHandler);
+
+module.exports = app;
+```
+
+### Performance Monitoring Best Practices
+
+```javascript
+// src/monitoring/performance.js
+const { performance } = require('perf_hooks');
+const { logger } = require('../utils/logger');
+
+class PerformanceMonitor {
+  measureAsync(name, fn) {
+    return async (...args) => {
+      const start = performance.now();
+      try {
+        const result = await fn(...args);
+        const duration = performance.now() - start;
+        
+        logger.debug('Performance measurement', {
+          operation: name,
+          duration: `${duration.toFixed(2)}ms`
+        });
+        
+        return result;
+      } catch (error) {
+        const duration = performance.now() - start;
+        logger.error('Performance measurement (failed)', {
+          operation: name,
+          duration: `${duration.toFixed(2)}ms`,
+          error: error.message
+        });
+        throw error;
+      }
+    };
+  }
+
+  trackMemory() {
+    const usage = process.memoryUsage();
+    logger.info('Memory usage', {
+      heapUsed: `${Math.round(usage.heapUsed / 1024 / 1024)}MB`,
+      heapTotal: `${Math.round(usage.heapTotal / 1024 / 1024)}MB`,
+      external: `${Math.round(usage.external / 1024 / 1024)}MB`,
+      rss: `${Math.round(usage.rss / 1024 / 1024)}MB`
+    });
+  }
+}
+
+module.exports = new PerformanceMonitor();
+```
+
+### Best Practices Summary
+
+1. **Implement comprehensive logging**: Structured logs with context
+2. **Use APM tools**: New Relic, DataDog, or similar for deep insights
+3. **Expose metrics**: Prometheus-compatible metrics endpoint
+4. **Create health checks**: Liveness and readiness probes
+5. **Set up alerting**: Proactive notification of issues
+6. **Monitor key metrics**: Response time, error rate, throughput
+7. **Track database performance**: Identify slow queries
+8. **Use distributed tracing**: Understand request flow across services
+9. **Create dashboards**: Visualize metrics in Grafana or similar
+10. **Regular review**: Analyze trends and optimize continuously
+
+### Key Takeaways
+
+Effective monitoring provides:
+- Real-time visibility into API health and performance
+- Early detection of issues before they impact users
+- Data-driven insights for optimization decisions
+- Faster incident response and resolution
+- Historical trends for capacity planning
+- Compliance and audit trails
+- Improved reliability and user experience
+
+### Conclusion
+
+Building a production-ready REST API requires attention to all ten areas covered in this guide:
+
+1. **Project Setup**: Solid foundation with proper structure and tooling
+2. **Routing**: Intuitive, RESTful endpoint design
+3. **Middleware**: Cross-cutting concerns handled consistently
+4. **Database**: Reliable data persistence and management
+5. **Authentication**: Secure user identity verification
+6. **Validation**: Data integrity at every entry point
+7. **Error Handling**: Graceful failure management
+8. **Testing**: Comprehensive verification of functionality
+9. **Deployment**: Reliable, automated release process
+10. **Monitoring**: Continuous visibility and alerting
+
+Each component builds upon the previous ones, creating a robust, scalable, and maintainable API that can serve production traffic reliably. By following these practices, you'll have an API that not only works correctly but can be operated, debugged, and improved over time.
+
+---
+
+**Section 10 Complete. Guide Complete.**

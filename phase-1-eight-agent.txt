@@ -1,0 +1,79 @@
+
+Stigmergy-MCP Token Comparison
+Task: Eight-Agent Pipeline  |  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 10
+──────────────────────────────────────────────────────────────────────
+
+Trial 1/10 ━──────────────────────── running...  0s elapsed  Trial 1/10 ━──────────────────────── run A...  0s elapsed  
+  Trial 1 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDuobAfsULCgfJt7NEk"}
+Trial 2/10 ━━━━───────────────────── running...  0s elapsed  Trial 2/10 ━━━━───────────────────── run A...  0s elapsed  
+  Trial 2 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDupMokpxsV8ku7nRob"}
+Trial 3/10 ━━━━━━─────────────────── running...  1s elapsed  Trial 3/10 ━━━━━━─────────────────── run A...  1s elapsed  
+  Trial 3 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDupxmWy9qy45wSVjZW"}
+Trial 4/10 ━━━━━━━━━──────────────── running...  1s elapsed  Trial 4/10 ━━━━━━━━━──────────────── run A...  1s elapsed  
+  Trial 4 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDuqSJ5HokKYidTo4MD"}
+Trial 5/10 ━━━━━━━━━━━────────────── running...  1s elapsed  Trial 5/10 ━━━━━━━━━━━────────────── run A...  1s elapsed  
+  Trial 5 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDuquaBjW3D1Y1q7MdQ"}
+Trial 6/10 ━━━━━━━━━━━━━━─────────── running...  1s elapsed  Trial 6/10 ━━━━━━━━━━━━━━─────────── run A...  1s elapsed  
+  Trial 6 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDurZWvKrpkvjLDvSgE"}
+Aborting: 6/6 trials failed (>5 threshold)
+
+==============================================================================
+  Stigmergy-MCP Token Comparison
+  Task: Eight-Agent Pipeline
+  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 0  |  Level: RAW_ONLY
+==============================================================================
+
+  AUTONOMOUS FLOOR (Run A: Single Agent)
+  Median: 0 tokens    CV: —
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOKEN DECOMPOSITION (medians, n=0)
+
+                              Run B         Run C         Delta     
+                              Msg-Pass      Stigmergy     
+  INTER-AGENT COMMUNICATION
+    Content Transfer          0             0             -0.0%
+    Mechanism Overhead        0             0             0
+    Coordination Instr.       0             0             0
+    Subtotal                  0             0             0
+  AGENT AUTONOMOUS
+    Task Reasoning            0             0             0
+    System Identity           0             0             0
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOTALS
+  Total Savings:              Median: 0.0%
+  Effective Savings:          Median: 0.0%
+
+  ──────────────────────────────────────────────────────────────────────────
+  STATISTICAL ANALYSIS
+
+  Inter-Agent Savings
+    Median: 0.0%
+
+  Content Transfer Savings
+    Median: 0.0%
+
+  ──────────────────────────────────────────────────────────────────────────
+  VARIANCE PROFILE (CV)
+  Category                    Run A       Run B       Run C       
+  Content Transfer            —           —           —
+  Mechanism Overhead          —           —           —
+  Coordination Instr.         —           —           —
+  Task Reasoning              —           —           —
+  System Identity             —           —           —
+
+  ──────────────────────────────────────────────────────────────────────────
+  CROSS-VALIDATION
+  Run A variance (CV): —    Calibrated threshold: —
+  Flagged trials: 0 (Run B), 0 (Run C)
+  Classification: UNRELIABLE
+
+==============================================================================
+  INTER-AGENT SAVINGS:  Median: 0.0%
+  EFFECTIVE SAVINGS:    Median: 0.0%
+==============================================================================
+
+Result saved: 5a0d63bb-181c-4934-ae5b-63f7358c4773
+View again: stigmergy-benchmark results show 5a0d63bb-181c-4934-ae5b-63f7358c4773
+

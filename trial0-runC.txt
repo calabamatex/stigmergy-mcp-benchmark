@@ -1,0 +1,402 @@
+## Section 10: Monitoring
+
+### Overview
+Monitoring is the final critical piece of a production-ready REST API. Without proper monitoring, you're flying blind—unable to detect issues before they impact users, diagnose problems when they occur, or optimize performance based on real-world usage patterns.
+
+### 10.1 The Three Pillars of Observability
+
+**Logs**: Detailed records of discrete events
+**Metrics**: Numerical measurements over time
+**Traces**: Request flows through distributed systems
+
+### 10.2 Structured Logging
+
+Implement structured logging for better searchability and analysis:
+
+```javascript
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.errors({ stack: true }),
+    winston.format.json()
+  ),
+  defaultMeta: { service: 'api-service' },
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+  ],
+});
+
+// Log with context
+logger.info('User login successful', {
+  userId: user.id,
+  ip: req.ip,
+  userAgent: req.get('user-agent'),
+  duration: Date.now() - startTime
+});
+```
+
+### 10.3 Application Metrics
+
+Track key performance indicators:
+
+```javascript
+const promClient = require('prom-client');
+
+// Create a Registry
+const register = new promClient.Registry();
+
+// Add default metrics
+promClient.collectDefaultMetrics({ register });
+
+// Custom metrics
+const httpRequestDuration = new promClient.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status_code'],
+  buckets: [0.1, 0.5, 1, 2, 5]
+});
+
+const activeConnections = new promClient.Gauge({
+  name: 'active_connections',
+  help: 'Number of active connections'
+});
+
+const requestCounter = new promClient.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'route', 'status_code']
+});
+
+register.registerMetric(httpRequestDuration);
+register.registerMetric(activeConnections);
+register.registerMetric(requestCounter);
+
+// Middleware to track metrics
+app.use((req, res, next) => {
+  const start = Date.now();
+  
+  res.on('finish', () => {
+    const duration = (Date.now() - start) / 1000;
+    httpRequestDuration
+      .labels(req.method, req.route?.path || req.path, res.statusCode)
+      .observe(duration);
+    
+    requestCounter
+      .labels(req.method, req.route?.path || req.path, res.statusCode)
+      .inc();
+  });
+  
+  next();
+});
+
+// Metrics endpoint
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
+```
+
+### 10.4 Health Checks
+
+Implement comprehensive health checks:
+
+```javascript
+app.get('/health', async (req, res) => {
+  const health = {
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+    status: 'healthy',
+    checks: {}
+  };
+
+  // Database check
+  try {
+    await db.query('SELECT 1');
+    health.checks.database = { status: 'up' };
+  } catch (error) {
+    health.checks.database = { status: 'down', error: error.message };
+    health.status = 'unhealthy';
+  }
+
+  // Redis check
+  try {
+    await redis.ping();
+    health.checks.redis = { status: 'up' };
+  } catch (error) {
+    health.checks.redis = { status: 'down', error: error.message };
+    health.status = 'unhealthy';
+  }
+
+  // Memory check
+  const memUsage = process.memoryUsage();
+  health.checks.memory = {
+    status: memUsage.heapUsed < memUsage.heapTotal * 0.9 ? 'up' : 'warning',
+    heapUsed: `${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`,
+    heapTotal: `${Math.round(memUsage.heapTotal / 1024 / 1024)}MB`
+  };
+
+  const statusCode = health.status === 'healthy' ? 200 : 503;
+  res.status(statusCode).json(health);
+});
+
+// Readiness check (for Kubernetes)
+app.get('/ready', async (req, res) => {
+  // Check if app is ready to receive traffic
+  if (isAppInitialized && await canConnectToDatabase()) {
+    res.status(200).send('Ready');
+  } else {
+    res.status(503).send('Not ready');
+  }
+});
+
+// Liveness check (for Kubernetes)
+app.get('/live', (req, res) => {
+  res.status(200).send('Alive');
+});
+```
+
+### 10.5 Application Performance Monitoring (APM)
+
+Integrate APM tools for deep insights:
+
+```javascript
+// New Relic
+require('newrelic');
+
+// Or Datadog
+const tracer = require('dd-trace').init({
+  service: 'my-api',
+  env: process.env.NODE_ENV,
+  analytics: true
+});
+
+// Or Elastic APM
+const apm = require('elastic-apm-node').start({
+  serviceName: 'my-api',
+  serverUrl: process.env.ELASTIC_APM_SERVER_URL,
+  environment: process.env.NODE_ENV
+});
+```
+
+### 10.6 Error Tracking
+
+Implement error tracking with Sentry or similar:
+
+```javascript
+const Sentry = require('@sentry/node');
+const Tracing = require('@sentry/tracing');
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+  integrations: [
+    new Sentry.Integrations.Http({ tracing: true }),
+    new Tracing.Integrations.Express({ app }),
+  ],
+  tracesSampleRate: 0.1, // Sample 10% of transactions
+});
+
+// Request handler must be first
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
+
+// Error handler must be last
+app.use(Sentry.Handlers.errorHandler());
+```
+
+### 10.7 Custom Monitoring Dashboard
+
+Create a monitoring middleware that tracks business metrics:
+
+```javascript
+class MonitoringService {
+  constructor() {
+    this.metrics = {
+      apiCalls: new Map(),
+      errors: new Map(),
+      slowQueries: []
+    };
+  }
+
+  trackApiCall(endpoint, duration, statusCode) {
+    const key = `${endpoint}:${statusCode}`;
+    const current = this.metrics.apiCalls.get(key) || { count: 0, totalDuration: 0 };
+    
+    this.metrics.apiCalls.set(key, {
+      count: current.count + 1,
+      totalDuration: current.totalDuration + duration,
+      avgDuration: (current.totalDuration + duration) / (current.count + 1)
+    });
+  }
+
+  trackError(error, context) {
+    const key = error.name;
+    const current = this.metrics.errors.get(key) || { count: 0, lastOccurrence: null };
+    
+    this.metrics.errors.set(key, {
+      count: current.count + 1,
+      lastOccurrence: new Date(),
+      context
+    });
+  }
+
+  trackSlowQuery(query, duration) {
+    if (duration > 1000) { // Queries slower than 1 second
+      this.metrics.slowQueries.push({
+        query,
+        duration,
+        timestamp: new Date()
+      });
+      
+      // Keep only last 100 slow queries
+      if (this.metrics.slowQueries.length > 100) {
+        this.metrics.slowQueries.shift();
+      }
+    }
+  }
+
+  getMetrics() {
+    return {
+      apiCalls: Object.fromEntries(this.metrics.apiCalls),
+      errors: Object.fromEntries(this.metrics.errors),
+      slowQueries: this.metrics.slowQueries
+    };
+  }
+}
+
+const monitoring = new MonitoringService();
+
+// Dashboard endpoint
+app.get('/admin/metrics', authenticateAdmin, (req, res) => {
+  res.json(monitoring.getMetrics());
+});
+```
+
+### 10.8 Alerting Strategy
+
+Set up alerts for critical issues:
+
+```javascript
+const alerting = {
+  // Alert on high error rate
+  checkErrorRate: () => {
+    const errorRate = calculateErrorRate();
+    if (errorRate > 0.05) { // 5% error rate
+      sendAlert({
+        severity: 'critical',
+        message: `Error rate is ${(errorRate * 100).toFixed(2)}%`,
+        channel: 'pagerduty'
+      });
+    }
+  },
+
+  // Alert on slow response times
+  checkResponseTime: () => {
+    const p95ResponseTime = calculateP95ResponseTime();
+    if (p95ResponseTime > 2000) { // 2 seconds
+      sendAlert({
+        severity: 'warning',
+        message: `P95 response time is ${p95ResponseTime}ms`,
+        channel: 'slack'
+      });
+    }
+  },
+
+  // Alert on database connection issues
+  checkDatabaseHealth: async () => {
+    try {
+      await db.query('SELECT 1');
+    } catch (error) {
+      sendAlert({
+        severity: 'critical',
+        message: 'Database connection failed',
+        error: error.message,
+        channel: 'pagerduty'
+      });
+    }
+  }
+};
+
+// Run checks every minute
+setInterval(() => {
+  alerting.checkErrorRate();
+  alerting.checkResponseTime();
+  alerting.checkDatabaseHealth();
+}, 60000);
+```
+
+### 10.9 Request Tracing
+
+Implement distributed tracing for complex request flows:
+
+```javascript
+const { v4: uuidv4 } = require('uuid');
+
+// Add trace ID to all requests
+app.use((req, res, next) => {
+  req.traceId = req.get('X-Trace-Id') || uuidv4();
+  res.set('X-Trace-Id', req.traceId);
+  
+  // Add to logger context
+  req.log = logger.child({ traceId: req.traceId });
+  
+  next();
+});
+
+// Use trace ID in all logs
+app.get('/api/users/:id', async (req, res) => {
+  req.log.info('Fetching user', { userId: req.params.id });
+  
+  try {
+    const user = await getUserById(req.params.id, req.traceId);
+    req.log.info('User fetched successfully', { userId: req.params.id });
+    res.json(user);
+  } catch (error) {
+    req.log.error('Error fetching user', { 
+      userId: req.params.id, 
+      error: error.message 
+    });
+    throw error;
+  }
+});
+```
+
+### 10.10 Monitoring Best Practices
+
+1. **Monitor what matters**: Focus on user-facing metrics (latency, errors, throughput)
+2. **Set meaningful thresholds**: Base alerts on SLOs (Service Level Objectives)
+3. **Avoid alert fatigue**: Only alert on actionable issues
+4. **Use log levels appropriately**: ERROR for issues requiring action, WARN for potential problems, INFO for significant events
+5. **Implement sampling**: For high-traffic APIs, sample traces and logs to reduce overhead
+6. **Monitor dependencies**: Track external API calls, database queries, cache hits/misses
+7. **Track business metrics**: Not just technical metrics—monitor sign-ups, transactions, etc.
+8. **Regular review**: Analyze metrics weekly to identify trends and optimization opportunities
+
+### 10.11 Production Monitoring Checklist
+
+- [ ] Structured logging implemented
+- [ ] Log aggregation configured (ELK, Splunk, CloudWatch)
+- [ ] Application metrics exposed (Prometheus format)
+- [ ] Health check endpoints implemented
+- [ ] APM tool integrated
+- [ ] Error tracking configured (Sentry, Rollbar)
+- [ ] Alerting rules defined
+- [ ] On-call rotation established
+- [ ] Dashboards created for key metrics
+- [ ] Runbooks written for common issues
+- [ ] Performance baselines established
+- [ ] SLOs/SLAs defined and monitored
+
+### Conclusion
+
+Monitoring is not a one-time setup but an ongoing practice. As your API evolves, continuously refine your monitoring strategy. The goal is to detect and resolve issues before users notice them, and to have the data needed to make informed decisions about scaling, optimization, and feature development.
+
+With comprehensive monitoring in place, you now have a truly production-ready REST API that you can operate with confidence.
+
+---
+
+**Section 10 Complete**: Your REST API guide now covers the full lifecycle from initial setup through production monitoring, providing a complete roadmap for building robust, scalable APIs.

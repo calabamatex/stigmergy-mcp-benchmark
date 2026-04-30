@@ -1,0 +1,84 @@
+
+Stigmergy-MCP Token Comparison
+Task: Seven-Agent Pipeline  |  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 10
+──────────────────────────────────────────────────────────────────────
+
+Trial 1/10 ━──────────────────────── running...  0s elapsed  Trial 1/10 ━──────────────────────── run A...  0s elapsed  Trial 1/10 ━──────────────────────── run B...  3m39s elapsed  Trial 1/10 ━──────────────────────── run C...  10m28s elapsed  Trial 1/10 ━━━────────────────────── complete  14m18s elapsed, ~128m45s remaining  
+Trial 2/10 ━━━━───────────────────── running...  14m18s elapsed  Trial 2/10 ━━━━───────────────────── run A...  14m18s elapsed  Trial 2/10 ━━━━───────────────────── run B...  17m56s elapsed  Trial 2/10 ━━━━───────────────────── run C...  25m00s elapsed  Trial 2/10 ━━━━━──────────────────── complete  28m39s elapsed, ~114m37s remaining  
+Trial 3/10 ━━━━━━─────────────────── running...  28m39s elapsed  Trial 3/10 ━━━━━━─────────────────── run A...  28m39s elapsed  Trial 3/10 ━━━━━━─────────────────── run B...  32m22s elapsed  Trial 3/10 ━━━━━━─────────────────── run C...  39m13s elapsed  Trial 3/10 ━━━━━━━━───────────────── complete  117m08s elapsed, ~273m20s remaining  
+  Provisional: inter-agent savings median 69.6% (CIs unavailable, n < 5)
+Trial 4/10 ━━━━━━━━━──────────────── running...  117m08s elapsed  Trial 4/10 ━━━━━━━━━──────────────── run A...  117m08s elapsed  Trial 4/10 ━━━━━━━━━──────────────── run B...  120m47s elapsed  Trial 4/10 ━━━━━━━━━──────────────── run C...  126m36s elapsed  Trial 4/10 ━━━━━━━━━━─────────────── complete  130m15s elapsed, ~195m23s remaining  
+  Provisional: inter-agent savings median 61.0% (CIs unavailable, n < 5)
+Trial 5/10 ━━━━━━━━━━━────────────── running...  130m15s elapsed  Trial 5/10 ━━━━━━━━━━━────────────── run A...  130m15s elapsed  Trial 5/10 ━━━━━━━━━━━────────────── run B...  134m01s elapsed  Trial 5/10 ━━━━━━━━━━━────────────── run C...  140m49s elapsed  Trial 5/10 ━━━━━━━━━━━━━──────────── complete  145m08s elapsed, ~145m08s remaining  
+  Preliminary: inter-agent savings median 52.3% CI [33.4%, 71.3%] (n < 10)
+Trial 6/10 ━━━━━━━━━━━━━━─────────── running...  145m08s elapsed  Trial 6/10 ━━━━━━━━━━━━━━─────────── run A...  145m08s elapsed  Trial 6/10 ━━━━━━━━━━━━━━─────────── run B...  148m44s elapsed  Trial 6/10 ━━━━━━━━━━━━━━─────────── run C...  154m36s elapsed  Trial 6/10 ━━━━━━━━━━━━━━━────────── complete  159m21s elapsed, ~106m14s remaining  
+  Preliminary: inter-agent savings median 51.8% CI [37.4%, 70.5%] (n < 10)
+Trial 7/10 ━━━━━━━━━━━━━━━━───────── running...  159m21s elapsed  Trial 7/10 ━━━━━━━━━━━━━━━━───────── run A...  159m21s elapsed  Trial 7/10 ━━━━━━━━━━━━━━━━───────── run B...  163m04s elapsed  
+  Trial 7 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDuhkgVYLpGnBM3GMky"}
+Trial 8/10 ━━━━━━━━━━━━━━━━━━━────── running...  168m39s elapsed  Trial 8/10 ━━━━━━━━━━━━━━━━━━━────── run A...  168m39s elapsed  
+  Trial 8 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDuigVa6Vs647EohJzV"}
+Trial 9/10 ━━━━━━━━━━━━━━━━━━━━━──── running...  168m39s elapsed  Trial 9/10 ━━━━━━━━━━━━━━━━━━━━━──── run A...  168m39s elapsed  
+  Trial 9 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDujHD4yQs6zrR3qEGT"}
+Trial 10/10 ━━━━━━━━━━━━━━━━━━━━━━━━─ running...  168m39s elapsed  Trial 10/10 ━━━━━━━━━━━━━━━━━━━━━━━━─ run A...  168m39s elapsed  
+  Trial 10 failed: Anthropic API error 400: {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits."},"request_id":"req_011CaZDujsvfXc1MWs3pWMrX"}
+
+==============================================================================
+  Stigmergy-MCP Token Comparison
+  Task: Seven-Agent Pipeline
+  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 6  |  Level: PRELIMINARY
+==============================================================================
+
+  AUTONOMOUS FLOOR (Run A: Single Agent)
+  Median: 62.0k tokens    IQR: [62.0k — 62.0k]    CV: 0.0%
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOKEN DECOMPOSITION (medians, n=6)
+
+                              Run B         Run C         Delta     
+                              Msg-Pass      Stigmergy     
+  INTER-AGENT COMMUNICATION
+    Content Transfer          61.3k         5.6k          -90.9%
+    Mechanism Overhead        0             19.0k         +19.0k
+    Coordination Instr.       1.5k          5.6k          +277.3%
+    Subtotal                  62.8k         30.2k         -51.9%
+  AGENT AUTONOMOUS
+    Task Reasoning            57.0k         22.0k         -61.5%
+    System Identity           0             0             0
+
+  ──────────────────────────────────────────────────────────────────────────
+  TOTALS
+  Total Savings:              Median: 54.6%    95% CI: [50.6%, 65.6%]    IQR: [53.6% — 61.3%]
+  Effective Savings:          Median: 54.6%    95% CI: [50.6%, 65.6%]    IQR: [53.6% — 61.3%]
+
+  ──────────────────────────────────────────────────────────────────────────
+  STATISTICAL ANALYSIS
+
+  Inter-Agent Savings
+    Median: 51.8%    95% CI: [37.4%, 70.5%]    IQR: [43.8% — 65.3%]
+
+  Content Transfer Savings
+    Median: 90.9%    95% CI: [88.0%, 94.5%]    IQR: [89.0% — 93.5%]
+
+  ──────────────────────────────────────────────────────────────────────────
+  VARIANCE PROFILE (CV)
+  Category                    Run A       Run B       Run C       
+  Content Transfer            —           36.7%       3.8%
+  Mechanism Overhead          —           —           1.2%
+  Coordination Instr.         —           4.2%        1.2%
+  Task Reasoning              0.0%        6.6%        10.7%
+  System Identity             0.5%        —           —
+
+  ──────────────────────────────────────────────────────────────────────────
+  CROSS-VALIDATION
+  Run A variance (CV): 0.0%    Calibrated threshold: 0.0%
+  Flagged trials: 6 (Run B), 6 (Run C)
+  Classification: UNRELIABLE
+
+==============================================================================
+  INTER-AGENT SAVINGS:  Median: 51.8%    95% CI: [37.4%, 70.5%]    IQR: [43.8% — 65.3%]
+  EFFECTIVE SAVINGS:    Median: 54.6%    95% CI: [50.6%, 65.6%]    IQR: [53.6% — 61.3%]
+==============================================================================
+
+Result saved: 89976549-1b4e-4233-84cb-fa0f347e3286
+View again: stigmergy-benchmark results show 89976549-1b4e-4233-84cb-fa0f347e3286
+
