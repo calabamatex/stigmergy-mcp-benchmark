@@ -56,6 +56,7 @@ export class StigmergySwarmExecutor implements RunExecutor {
 
     const start = Date.now();
     let finalOutput = '';
+    const agentOutputs: Array<{ agentId: string; agentRole: string; output: string }> = [];
 
     try {
       for (let i = 0; i < steps.length; i++) {
@@ -142,6 +143,11 @@ export class StigmergySwarmExecutor implements RunExecutor {
           }
         }
 
+        agentOutputs.push({
+          agentId: `agent-${i}`,
+          agentRole: step.agentRole,
+          output: agentOutput,
+        });
         finalOutput = agentOutput;
       }
     } finally {
@@ -158,6 +164,7 @@ export class StigmergySwarmExecutor implements RunExecutor {
       steps.length,
       true,
       finalOutput,
+      agentOutputs,
     );
   }
 }
