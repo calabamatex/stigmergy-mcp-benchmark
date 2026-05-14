@@ -1,0 +1,22 @@
+
+Stigmergy-MCP Token Comparison
+Task: Ten-Agent Pipeline  |  Model: claude-sonnet-4-5 (anthropic)  |  Trials: 10
+──────────────────────────────────────────────────────────────────────
+
+file:///Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/packages/llm-client/dist/anthropic.js:36
+            throw new Error('ANTHROPIC_API_KEY is required');
+                  ^
+
+Error: ANTHROPIC_API_KEY is required
+    at new AnthropicClient (file:///Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/packages/llm-client/dist/anthropic.js:36:19)
+    at createClient (file:///Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/packages/cli/dist/commands/run.js:80:22)
+    at runCompare (file:///Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/packages/cli/dist/commands/run.js:35:20)
+    at Command.<anonymous> (file:///Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/packages/cli/dist/index.js:31:11)
+    at Command.listener [as _actionHandler] (/Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/node_modules/.pnpm/commander@12.1.0/node_modules/commander/lib/command.js:542:17)
+    at /Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/node_modules/.pnpm/commander@12.1.0/node_modules/commander/lib/command.js:1502:14
+    at Command._chainOrCall (/Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/node_modules/.pnpm/commander@12.1.0/node_modules/commander/lib/command.js:1386:12)
+    at Command._parseCommand (/Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/node_modules/.pnpm/commander@12.1.0/node_modules/commander/lib/command.js:1501:27)
+    at /Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/node_modules/.pnpm/commander@12.1.0/node_modules/commander/lib/command.js:1265:27
+    at Command._chainOrCall (/Users/ethanallen/StigmergyBenchmark/stigmergy-mcp-benchmark/node_modules/.pnpm/commander@12.1.0/node_modules/commander/lib/command.js:1386:12)
+
+Node.js v22.14.0
