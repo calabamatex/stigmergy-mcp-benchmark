@@ -1,0 +1,67 @@
+From: stigmergy-mcp-benchmark fix
+Subject: [PATCH] fix: centralize message sanitization in Anthropic adapter
+
+Trailing whitespace in any message content can trigger HTTP 400 from
+the Anthropic API. Previous patches addressed this at three executor
+sites but missed tool result content and any future executor code
+paths. The right fix is at the adapter layer where API requests are
+built; this catches all current and future cases.
+
+Adds a sanitizeMessage helper that strips trailing whitespace from
+every text and tool_result content block before the request goes out.
+Applied universally in AnthropicClient.complete().
+
+Once this lands, the executor-level patches become redundant and
+could be reverted. They are left in place defensively for now since
+they cause no harm.
+
+---
+ packages/llm-client/src/anthropic.ts | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/packages/llm-client/src/anthropic.ts b/packages/llm-client/src/anthropic.ts
+--- a/packages/llm-client/src/anthropic.ts
++++ b/packages/llm-client/src/anthropic.ts
+@@ -1,8 +1,32 @@
+-import type { CompletionRequest, CompletionResponse, ContentBlock } from '@stigmergy-benchmark/core';
++import type { CompletionRequest, CompletionResponse, ContentBlock, Message } from '@stigmergy-benchmark/core';
+ import type { LLMClient } from './client.js';
+ import { ApiError } from './errors.js';
+ 
+ /**
++ * Strip trailing whitespace from any text content in a message before sending
++ * to the Anthropic API. The API rejects multi-turn conversations where any
++ * message content ends with whitespace; the error reports it as a problem with
++ * "final assistant content" but the rule applies to all roles in practice.
++ */
++function sanitizeMessage(m: Message): Message {
++  if (typeof m.content === 'string') {
++    return { ...m, content: m.content.replace(/\s+$/, '') };
++  }
++  return {
++    ...m,
++    content: m.content.map(b => {
++      if (b.type === 'text' && typeof b.text === 'string') {
++        return { ...b, text: b.text.replace(/\s+$/, '') };
++      }
++      if (b.type === 'tool_result' && typeof b.content === 'string') {
++        return { ...b, content: b.content.replace(/\s+$/, '') };
++      }
++      return b;
++    }),
++  };
++}
++
++/**
+  * Anthropic API client. Makes real API calls to Claude models.
+  * Requires ANTHROPIC_API_KEY environment variable or explicit apiKey.
+  */
+@@ -33,7 +57,7 @@ export class AnthropicClient implements LLMClient {
+       model: request.model,
+       max_tokens: request.maxTokens,
+       temperature: request.temperature,
+-      messages: conversationMessages.map(m => ({
++      messages: conversationMessages.map(sanitizeMessage).map(m => ({
+         role: m.role === 'tool' ? 'user' : m.role,
+         content: m.content,
+       })),

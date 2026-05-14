@@ -193,6 +193,11 @@ export interface RunResult {
   success: boolean;
   output: unknown;
   tokenLog: TokenUsageRecord[];
+  agentOutputs?: Array<{
+    agentId: string;
+    agentRole: string;
+    output: string;
+  }>;
 }
 
 export interface TrialCrossValidation {

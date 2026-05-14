@@ -1,0 +1,58 @@
+From: stigmergy-mcp-benchmark fix
+Subject: [PATCH] fix: strip trailing whitespace from assistant content before replay
+
+The Anthropic API rejects multi-turn conversations where any assistant
+message's final text content ends with trailing whitespace. This bug
+fires probabilistically based on conversation length: rarely at 2-3
+agents, reliably at 10 agents. All three ten-agent-pipeline trials
+aborted with HTTP 400.
+
+Root cause: the executors push response.content directly back into
+the messages array. If the model emits a text block ending in
+whitespace, that whitespace survives into the next API call and
+triggers the API's strict validation.
+
+Fix: normalize text blocks before pushing to history by trimming
+trailing whitespace from each block's text field.
+
+---
+ packages/executors/src/message-passing.ts  | 8 +++++++-
+ packages/executors/src/stigmergy-swarm.ts  | 8 +++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/packages/executors/src/message-passing.ts b/packages/executors/src/message-passing.ts
+--- a/packages/executors/src/message-passing.ts
++++ b/packages/executors/src/message-passing.ts
+@@ -67,7 +67,13 @@ export class MessagePassingExecutor implements RunExecutor {
+           agentOutput = textBlocks.map(b => b.text ?? '').join('\n');
+         }
+ 
+-        messages.push({ role: 'assistant', content: response.content });
++        // Strip trailing whitespace from text blocks; the Anthropic API
++        // rejects multi-turn conversations where the final assistant
++        // text content ends with whitespace.
++        const normalizedContent = response.content.map(b =>
++          b.type === 'text' ? { ...b, text: (b.text ?? '').replace(/\s+$/, '') } : b
++        );
++        messages.push({ role: 'assistant', content: normalizedContent });
+ 
+         if (response.stopReason === 'end_turn' || response.stopReason === 'stop') {
+           break;
+diff --git a/packages/executors/src/stigmergy-swarm.ts b/packages/executors/src/stigmergy-swarm.ts
+--- a/packages/executors/src/stigmergy-swarm.ts
++++ b/packages/executors/src/stigmergy-swarm.ts
+@@ -67,7 +67,13 @@ export class StigmergySwarmExecutor implements RunExecutor {
+             agentOutput = textBlocks.map(b => b.text ?? '').join('\n');
+           }
+ 
+-          messages.push({ role: 'assistant', content: response.content });
++          // Strip trailing whitespace from text blocks; the Anthropic API
++          // rejects multi-turn conversations where the final assistant
++          // text content ends with whitespace.
++          const normalizedContent = response.content.map(b =>
++            b.type === 'text' ? { ...b, text: (b.text ?? '').replace(/\s+$/, '') } : b
++          );
++          messages.push({ role: 'assistant', content: normalizedContent });
+ 
+           if (response.stopReason === 'end_turn' || response.stopReason === 'stop') {
+             break;

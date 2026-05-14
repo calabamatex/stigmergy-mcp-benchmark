@@ -1,0 +1,30 @@
+From: stigmergy-mcp-benchmark fix
+Subject: [PATCH] fix: strip trailing whitespace in single-agent executor too
+
+The single-agent executor has the same multi-turn loop structure as
+message-passing and stigmergy-swarm, and is vulnerable to the same
+trailing whitespace bug when the model returns tool_use responses
+that get replayed in subsequent turns. The previous patch missed it.
+
+---
+ packages/executors/src/single-agent.ts | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/packages/executors/src/single-agent.ts b/packages/executors/src/single-agent.ts
+--- a/packages/executors/src/single-agent.ts
++++ b/packages/executors/src/single-agent.ts
+@@ -47,7 +47,13 @@ export class SingleAgentExecutor implements RunExecutor {
+         lastOutput = textBlocks.map(b => b.text ?? '').join('\n');
+       }
+ 
+-      messages.push({ role: 'assistant', content: response.content });
++      // Strip trailing whitespace from text blocks; the Anthropic API
++      // rejects multi-turn conversations where the final assistant
++      // text content ends with whitespace.
++      const normalizedContent = response.content.map(b =>
++        b.type === 'text' ? { ...b, text: (b.text ?? '').replace(/\s+$/, '') } : b
++      );
++      messages.push({ role: 'assistant', content: normalizedContent });
+ 
+       if (response.stopReason === 'end_turn' || response.stopReason === 'stop') {
+         break;

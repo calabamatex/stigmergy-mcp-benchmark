@@ -1,0 +1,61 @@
+From: stigmergy-mcp-benchmark fix
+Subject: [PATCH] fix: detect Content Transfer in Run B handoff messages
+
+The Run B (message-passing) handoff string failed to match any
+CONTENT_TRANSFER_PATTERNS regex, causing the entire handoff payload
+to fall through to COORDINATION_PATTERNS where it matched
+"previous agent produced" and was misclassified as Coordination
+Instructions.
+
+This patch:
+1. Adds an explicit [content-transfer] marker to the handoff template,
+   mirroring the existing TOOL_DEFINITION_MARKER pattern.
+2. Adds two regex patterns to CONTENT_TRANSFER_PATTERNS: one for the
+   new marker, one for the existing "--- Agent N (role) output ---"
+   block separator already emitted by messagePassingHandoff.
+
+After this patch, Run B Content Transfer is measured correctly and
+inter-agent savings calculations reflect the actual O(N^2) growth
+in message-passing versus O(N) growth in stigmergy.
+
+---
+ packages/classifier/src/categories.ts    | 4 +++-
+ packages/executors/src/agent-prompt.ts   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/packages/classifier/src/categories.ts b/packages/classifier/src/categories.ts
+--- a/packages/classifier/src/categories.ts
++++ b/packages/classifier/src/categories.ts
+@@ -29,11 +29,13 @@ export const COORDINATION_PATTERNS: RegExp[] = [
+ /**
+  * Content transfer patterns — indicate work product being passed between agents.
+  */
+ export const CONTENT_TRANSFER_PATTERNS: RegExp[] = [
++  /\[content-transfer\]/i,
++  /---\s*Agent\s+\d+\s+\(.+?\)\s+output\s*---/i,
+   /\bhere\s+is\s+(the|my)\s+(output|result|analysis|findings|code|review)\b/i,
+   /\bthe\s+following\s+(was|is)\s+(produced|generated|found)\s+by\b/i,
+   /\bagent\s+\w+('s)?\s+(output|result|analysis|response)\s*:/i,
+   /\b(previous|prior)\s+agent('s)?\s+(output|work|response)\b/i,
+-  /^```[\s\S]{200,}/m, // Large code blocks (>= 200 chars, likely work product)
++  /^```[\s\S]{200,}/m,
+ ];
+ 
+ /**
+diff --git a/packages/executors/src/agent-prompt.ts b/packages/executors/src/agent-prompt.ts
+--- a/packages/executors/src/agent-prompt.ts
++++ b/packages/executors/src/agent-prompt.ts
+@@ -53,11 +53,11 @@ export function messagePassingHandoff(
+   if (previousOutputs.length === 0) return '';
+ 
+   const parts = previousOutputs.map(
+     (p, i) => `--- Agent ${i + 1} (${p.agentRole}) output ---\n${p.output}`,
+   );
+ 
+   return [
+-    `The previous agent produced the following. Please review and continue:`,
++    `[content-transfer] Prior agent outputs follow. Continue from where they left off.`,
+     ``,
+     ...parts,
+   ].join('\n');
+ }
