@@ -1,13 +1,17 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { execSync } from 'child_process';
 import { existsSync, unlinkSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+import { tmpdir } from 'os';
 
-const CLI = 'node packages/cli/dist/index.js';
-const TEST_DB = '/tmp/e2e-benchmark-test.db';
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
+const CLI = `node ${resolve(REPO_ROOT, 'packages/cli/dist/index.js')}`;
+const TEST_DB = resolve(tmpdir(), 'e2e-benchmark-test.db');
 
 function run(cmd: string): string {
   return execSync(`${CLI} ${cmd}`, {
-    cwd: '/home/user/stigmergy-mcp-benchmark',
+    cwd: REPO_ROOT,
     encoding: 'utf-8',
     timeout: 30_000,
     env: { ...process.env, STIGMERGY_BENCHMARK_DB: TEST_DB },
@@ -52,7 +56,7 @@ describe('CLI E2E', () => {
   // Tasks
   // ──────────────────────────────────────────────
 
-  it('lists all 6 tasks', () => {
+  it('lists all 10 tasks', () => {
     const output = run('tasks list');
     expect(output).toContain('Available Benchmark Tasks');
     expect(output).toContain('research-report');
@@ -61,7 +65,11 @@ describe('CLI E2E', () => {
     expect(output).toContain('single-agent-null');
     expect(output).toContain('tiny-handoff');
     expect(output).toContain('ten-agent-pipeline');
-    expect(output).toContain('6 tasks available');
+    expect(output).toContain('five-agent-pipeline');
+    expect(output).toContain('six-agent-pipeline');
+    expect(output).toContain('seven-agent-pipeline');
+    expect(output).toContain('eight-agent-pipeline');
+    expect(output).toContain('10 tasks available');
   });
 
   // ──────────────────────────────────────────────

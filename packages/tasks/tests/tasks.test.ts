@@ -3,9 +3,21 @@ import { getTask, listTasks } from '../src/index.js';
 import { TaskCategory, TaskDifficulty } from '@stigmergy-benchmark/core';
 
 describe('Task Registry', () => {
-  it('registers all 6 tasks', () => {
+  it('registers all 10 tasks', () => {
     const tasks = listTasks();
-    expect(tasks.length).toBe(6);
+    expect(tasks.length).toBe(10);
+  });
+
+  it('extended pipeline tasks (N=5..8) are registered', () => {
+    const ids = listTasks().map((t) => t.id);
+    expect(ids).toEqual(
+      expect.arrayContaining([
+        'five-agent-pipeline',
+        'six-agent-pipeline',
+        'seven-agent-pipeline',
+        'eight-agent-pipeline',
+      ]),
+    );
   });
 
   it('retrieves task by id', () => {
@@ -22,7 +34,7 @@ describe('Task Registry', () => {
   it('research-report is sequential with 3 steps', () => {
     const task = getTask('research-report');
     expect(task.category).toBe(TaskCategory.SEQUENTIAL);
-    expect(task.steps.map(s => s.agentRole)).toEqual(['researcher', 'writer', 'reviewer']);
+    expect(task.steps.map((s) => s.agentRole)).toEqual(['researcher', 'writer', 'reviewer']);
   });
 
   it('multi-source is parallel with 4 agents', () => {
