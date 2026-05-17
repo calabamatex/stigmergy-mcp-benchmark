@@ -2,6 +2,20 @@
 
 Empirical benchmark proving stigmergic coordination reduces inter-agent token usage compared to message-passing multi-agent orchestration.
 
+## Results
+
+**At 10 agents on a sequential coordination task, stigmergy reduces inter-agent token consumption by 46 percent compared to direct message-passing** (Wilcoxon signed-rank test, p = 0.002, 95% CI: 38–54%). Content Transfer specifically is reduced by 72 percent (95% CI: 67–76%). Reproduced across three independent runs.
+
+Where to find the data:
+
+- **[Phase 1 Release `phase-1-data-v1`](https://github.com/calabamatex/Stigmergy-mcp-benchmark/releases/tag/phase-1-data-v1)** — one-click download of the canonical SQLite export bundle (CSVs, schema, gzipped DB, manifest), executive summary, and per-N run logs.
+- **[Executive summary (Markdown)](https://github.com/calabamatex/Stigmergy-mcp-benchmark/blob/results/phase-1-data/artifacts/executive-summary.md)** — plain-English findings writeup: what it means, what it doesn't mean, what's next.
+- **[`results/phase-1-data` branch](https://github.com/calabamatex/Stigmergy-mcp-benchmark/tree/results/phase-1-data)** — full browsable file tree: every export snapshot, audit run, and per-agent pipeline log committed to date.
+
+> **Note:** Result artifacts are kept on the `results/phase-1-data` branch (not `main`) so binary snapshots don't bloat the code history. The Release above is the canonical, citeable snapshot.
+
+A separate known gap is tracked transparently at issue [#5](https://github.com/calabamatex/Stigmergy-mcp-benchmark/issues/5) — the `token_usage` table stopped accumulating new rows after the canonical export was taken; the published snapshot predates that regression.
+
 ## What It Does
 
 Runs the **same task** through three architectures, measures token usage across five categories, and applies statistical rigor (bootstrap CIs, Wilcoxon signed-rank, TOST equivalence) over multiple trials.
