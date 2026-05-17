@@ -1,4 +1,10 @@
-import { RunType, type BenchmarkTask, type RunResult, type RunContext, type Message } from '@stigmergy-benchmark/core';
+import {
+  RunType,
+  type BenchmarkTask,
+  type RunResult,
+  type RunContext,
+  type Message,
+} from '@stigmergy-benchmark/core';
 import type { LLMClient } from '@stigmergy-benchmark/llm-client';
 import { TokenTracker, InstrumentedLLMClient } from '@stigmergy-benchmark/llm-client';
 import { RuleClassifier } from '@stigmergy-benchmark/classifier';
@@ -22,7 +28,11 @@ export class SingleAgentExecutor implements RunExecutor {
     const tracker = new TokenTracker();
     const classifier = new RuleClassifier();
     const instrumented = new InstrumentedLLMClient(
-      client, classifier, tracker, 'benchmark', config.model,
+      client,
+      classifier,
+      tracker,
+      'benchmark',
+      config.model,
     );
 
     const agentContext: RunContext = {
@@ -48,9 +58,9 @@ export class SingleAgentExecutor implements RunExecutor {
       });
 
       // Collect text output
-      const textBlocks = response.content.filter(b => b.type === 'text');
+      const textBlocks = response.content.filter((b) => b.type === 'text');
       if (textBlocks.length > 0) {
-        lastOutput = textBlocks.map(b => b.text ?? '').join('\n');
+        lastOutput = textBlocks.map((b) => b.text ?? '').join('\n');
       }
 
       // Append assistant response to conversation
@@ -90,6 +100,7 @@ export class SingleAgentExecutor implements RunExecutor {
       1,
       true,
       lastOutput,
+      [{ agentId: 'agent-0', agentRole: 'single', output: lastOutput }],
     );
   }
 }

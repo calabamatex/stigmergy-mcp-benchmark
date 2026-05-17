@@ -5,16 +5,19 @@ import type { BenchmarkTask, TaskStep } from '@stigmergy-benchmark/core';
  * Contains ONLY task description — no coordination instructions.
  */
 export function singleAgentSystemPrompt(task: BenchmarkTask): string {
-  return task.singleAgentPrompt || [
-    `You are an expert assistant. Complete the following task thoroughly.`,
-    ``,
-    `Task: ${task.name}`,
-    `${task.description}`,
-    ``,
-    `Instructions: ${task.userPrompt}`,
-    ``,
-    `Provide your complete output when done.`,
-  ].join('\n');
+  return (
+    task.singleAgentPrompt ||
+    [
+      `You are an expert assistant. Complete the following task thoroughly.`,
+      ``,
+      `Task: ${task.name}`,
+      `${task.description}`,
+      ``,
+      `Instructions: ${task.userPrompt}`,
+      ``,
+      `Provide your complete output when done.`,
+    ].join('\n')
+  );
 }
 
 /**
@@ -57,7 +60,7 @@ export function messagePassingHandoff(
   );
 
   return [
-    `The previous agent produced the following. Please review and continue:`,
+    `[content-transfer] Prior agent outputs follow. Continue from where they left off.`,
     ``,
     ...parts,
   ].join('\n');

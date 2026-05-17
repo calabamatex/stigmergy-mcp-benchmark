@@ -32,7 +32,7 @@ export class MessagePassingExecutor implements RunExecutor {
     );
 
     const steps = task.steps.slice(0, config.agentCount);
-    const agentOutputs: Array<{ agentRole: string; output: string }> = [];
+    const agentOutputs: Array<{ agentId: string; agentRole: string; output: string }> = [];
 
     const agentContext: RunContext = {
       ...context,
@@ -99,7 +99,11 @@ export class MessagePassingExecutor implements RunExecutor {
         }
       }
 
-      agentOutputs.push({ agentRole: step.agentRole, output: agentOutput });
+      agentOutputs.push({
+        agentId: `agent-${i}`,
+        agentRole: step.agentRole,
+        output: agentOutput,
+      });
       finalOutput = agentOutput;
     }
 
@@ -113,6 +117,7 @@ export class MessagePassingExecutor implements RunExecutor {
       steps.length,
       true,
       finalOutput,
+      agentOutputs,
     );
   }
 }
