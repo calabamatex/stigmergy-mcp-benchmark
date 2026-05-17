@@ -33,7 +33,7 @@ describe('Dashboard API', () => {
     expect(res.status).toBe(200);
     const tasks = await res.json();
     expect(Array.isArray(tasks)).toBe(true);
-    expect(tasks.length).toBe(6);
+    expect(tasks.length).toBe(10);
     expect(tasks[0]).toHaveProperty('id');
     expect(tasks[0]).toHaveProperty('name');
   });
